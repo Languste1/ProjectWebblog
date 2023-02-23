@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class WebBlogController {
+
 @GetMapping("/")
     public String index(){
 
