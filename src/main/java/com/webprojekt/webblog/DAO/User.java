@@ -32,12 +32,19 @@ public class User {
     )
     private String name;
     @Column(
-            name = "is_user_admin",
-            nullable = false
+            name = "is_user_admin"
+
     )
     boolean isAdmin;
 
     @OneToMany(mappedBy = "user")
     private List<Entry> entry;
 
+    public User(String name) {
+        this.name = name;
+        this.isAdmin=false;
+    }
+
+    public User() {
+    }
 }

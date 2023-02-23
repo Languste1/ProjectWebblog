@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity(name = "entry")
@@ -18,7 +19,7 @@ public class Entry {
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
+            generator = "entry_sequence"
     )
     @Column(
             nullable = false
@@ -27,9 +28,10 @@ public class Entry {
 
     @Column(
             name = "entry_date",
-            nullable = false
+            nullable = false,
+            columnDefinition = "TIMESTAMP"
     )
-    private LocalDate date;
+    private LocalDateTime date;
 
     @Column(
             name = "text",
@@ -41,5 +43,11 @@ public class Entry {
     @JoinColumn(name = "idUser", nullable = false)
     private User user;
 
+    public Entry( String text) {
+        this.date= LocalDateTime.now ();
+        this.text = text;
+    }
 
+    public Entry() {
+    }
 }

@@ -13,13 +13,23 @@ public class EntryController {
 
     @Autowired
     WebBlogServices webBlogServices;
-    @GetMapping("/readentry")
-    public @ResponseBody String getEntry (Model model ) {
-        model.addAttribute("Entries", webBlogServices.getEntries());
 
 
 
-    return "Tamayo ist der Beste!!!!!!!!!!!!";
+    @GetMapping("/Entry")
+    public  String getEntry (Model model ) {
+
+        webBlogServices.addUser ("Peter");
+        webBlogServices.addUser ("Hanz");
+        webBlogServices.addUser ("Kevin");
+        webBlogServices.addEntry ("Hier ist ein Text1",1L);
+        webBlogServices.addEntry ("Hier ist ein Text2",2L);
+        webBlogServices.addEntry ("Hier ist ein Text3",3L);
+        webBlogServices.addEntry ("Hier ist ein Text4",1L);
+
+        model.addAttribute("entries", webBlogServices.getEntriesByCreationDate ());
+
+        return "entries";
     }
 
 

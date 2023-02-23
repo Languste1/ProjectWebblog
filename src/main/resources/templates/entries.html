@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Titel</title>
+    <link rel="stylesheet" href="path/to/bulma.css"><script src="path/to/bulma.js"></script>
+</head>
+<body >
+<h1 >Hier sind die Beiträge</h1>
+<br>
+<ul >
+  <li th:each="e : ${entries}">
+   <div>
+     <span>Date: </span><span th:text="${e.date}"></span> <span>Name: </span>  <span th:text="${e.user.name}"></span>
+   </div>
+    <div>
+      <span>Text: </span>  <span th:text="${e.text}"></span>
+    </div>
+  </li>
+</ul>
+</body>
+</html>
