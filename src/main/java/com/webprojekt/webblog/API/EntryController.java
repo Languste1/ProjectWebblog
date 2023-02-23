@@ -3,7 +3,6 @@ package com.webprojekt.webblog.API;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class UserController {
-
+public class EntryController {
 
 }
