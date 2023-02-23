@@ -3,17 +3,17 @@ package com.webprojekt.webblog.DAO;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
+import java.time.LocalDate;
 
 @Data
-@Entity(name = "user")
+@Entity(name = "entry")
 @Table
-public class User {
+public class Entry {
+
     @Id
     @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
+            name= "entry_sequence",
+            sequenceName = "entry_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
@@ -24,20 +24,22 @@ public class User {
             nullable = false
     )
     private long id;
-    @Column(
-            name = "name",
-            nullable = false,
-            columnDefinition = "TEXT"
 
-    )
-    private String name;
     @Column(
-            name = "is_user_admin",
+            name = "entry_date",
             nullable = false
     )
-    boolean isAdmin;
+    private LocalDate date;
 
-    @OneToMany(mappedBy = "user")
-    private List<Entry> entry;
+    @Column(
+            name = "text",
+            nullable = false
+    )
+    private String text;
+
+    @ManyToOne
+    @JoinColumn(name = "idUser", nullable = false)
+    private User user;
+
 
 }
