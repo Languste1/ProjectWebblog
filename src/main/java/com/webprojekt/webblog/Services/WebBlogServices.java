@@ -1,5 +1,6 @@
 package com.webprojekt.webblog.Services;
 
+import com.webprojekt.webblog.DAO.Comment;
 import com.webprojekt.webblog.DAO.Entry;
 import com.webprojekt.webblog.DAO.User;
 import com.webprojekt.webblog.Repositories.CommentRepository;
@@ -32,10 +33,17 @@ public class WebBlogServices {
         return entryRepository.findAll (sort);
     }
 
+    public List<Comment> getCommentsByCreationDate(){
+        Sort sort = Sort.by(Sort.Direction.ASC, "date");
+        return commentRepository.findAll(sort);
+    }
+
     public List<Entry> getEntries() {
             return entryRepository.findAll ();
     }
     // Methode, um eine Entry zu addieren
+
+
     public void addEntry(String text, Long customerId){
     Optional<User> user= userRepository.findById (customerId);
     Entry entry=new Entry (text);
@@ -43,6 +51,17 @@ public class WebBlogServices {
     entry.setUser (user.get ());
     entryRepository.save (entry);
     }
+
+    public void addComment(String text, Long userId, Long entryID){
+        Optional<User> user = userRepository.findById(userId);
+        Optional<Entry> entry = entryRepository.findById(entryID);
+        Comment comment = new Comment(text);
+        comment.setText(text);
+        comment.setUser(user.get());
+        comment.setEntry(entry.get());
+        commentRepository.save(comment);
+    }
+
 
     public void addUser(String name) {
         User user = new User (name);

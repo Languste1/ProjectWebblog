@@ -3,20 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Titel</title>
-    <link rel="stylesheet" href="path/to/bulma.css"><script src="path/to/bulma.js"></script>
+    <link rel="stylesheet" href="path/to/bulma.css">
+    <script src="path/to/bulma.js"></script>
 </head>
-<body >
-<h1 >Hier sind die Beiträge</h1>
+<body>
+<h1>Hier sind die Beiträge</h1>
 <br>
-<ul >
-  <li th:each="e : ${entries}">
-   <div>
-     <span>Date: </span><span th:text="${e.date}"></span> <span>Name: </span>  <span th:text="${e.user.name}"></span>
-   </div>
-    <div>
-      <span>Text: </span>  <span th:text="${e.text}"></span>
-    </div>
-  </li>
+<ul>
+    <li th:each="e : ${entries}">
+        <div>
+            <span>Date: </span><span th:text="${e.date}"></span>
+            <span>Name: </span> <span th:text="${e.user.name}"></span>
+        </div>
+        <div>
+            <span>Text: </span> <span th:text="${e.text}"></span>
+        </div>
+
+        <div>
+            <ul>
+
+                <li th:each="c : ${comments}" th:if="${e.id==c.getEntry().getId()}">
+                    <div>
+                        <span>Name: </span><span th:text="${c.user.name}"></span>
+                        <span>Date: </span><span th:text="${c.date}"></span>
+                        <span>Comment: </span><span th:text="${c.text}"></span>
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+    </li>
 </ul>
 </body>
 </html>

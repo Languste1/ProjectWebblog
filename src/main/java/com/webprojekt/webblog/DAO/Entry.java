@@ -3,7 +3,6 @@ package com.webprojekt.webblog.DAO;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

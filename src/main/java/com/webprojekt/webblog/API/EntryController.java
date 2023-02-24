@@ -19,7 +19,7 @@ public class EntryController {
     @GetMapping("/Entry")
     public  String getEntry (Model model ) {
 
-        /*
+
         webBlogServices.addUser ("Peter");
         webBlogServices.addUser ("Hanz");
         webBlogServices.addUser ("Kevin");
@@ -28,8 +28,22 @@ public class EntryController {
         webBlogServices.addEntry ("Hier ist ein Text3",3L);
         webBlogServices.addEntry ("Hier ist ein Text4",1L);
 
-         */
+        webBlogServices.addComment("testkommentar1", 1L, 1L);
+
+
+
+
+
+
+
         model.addAttribute("entries", webBlogServices.getEntriesByCreationDate ());
+
+
+        model.addAttribute("comments", webBlogServices.getCommentsByCreationDate());
+  /*
+
+         */
+
 
 
         return "entries";
