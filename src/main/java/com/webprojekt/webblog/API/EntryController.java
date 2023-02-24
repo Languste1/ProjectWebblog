@@ -11,17 +11,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class EntryController {
 
-    @Autowired
+
     WebBlogServices webBlogServices;
 
-
+    @Autowired
+    public EntryController(WebBlogServices webBlogServices) {
+        this.webBlogServices = webBlogServices;
+    }
 
     @GetMapping("/Entry")
     public  String getEntry (Model model ) {
 
-        webBlogServices.addUser ("Peter");
-        webBlogServices.addUser ("Hanz");
-        webBlogServices.addUser ("Kevin");
+        webBlogServices.addUser ("Peter", "PeterPan", "PeterPan", "PeterPan");
+        webBlogServices.addUser ("Hanz", "HanzPan", "HanzPan", "HanzPan");
+        webBlogServices.addUser ("Kevin", "KevinPan", "KevinPan", "KevinPan");
         webBlogServices.addEntry ("Hier ist ein Text1",1L);
         webBlogServices.addEntry ("Hier ist ein Text2",2L);
         webBlogServices.addEntry ("Hier ist ein Text3",3L);

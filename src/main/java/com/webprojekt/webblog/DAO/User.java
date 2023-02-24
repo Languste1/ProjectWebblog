@@ -1,6 +1,8 @@
 package com.webprojekt.webblog.DAO;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.List;
@@ -24,6 +26,9 @@ public class User {
             nullable = false
     )
     private long id;
+
+    /*@OneToMany(mappedBy = "user")
+    List<Session> sessions;*/
     @Column(
             name = "name",
             nullable = false,
@@ -44,7 +49,44 @@ public class User {
         this.name = name;
         this.isAdmin=false;
     }
+    @Column(name = "username",
+    nullable = false, unique = true)
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Only letters, digits and underscores allowed")
+    private String username;
+
+    @Column(name = "passwort",
+    nullable = false)
+    @Size(min = 5, message = "your password must have at least 5 characters") //Theoretisch auch max implementierbar
+    private String passwort;
+
+
+    @Transient //Passwort wird von Tabelle ignoriert
+    private String passwort2;
+
+
 
     public User() {
     }
+
+    public User(String name, String username, String passwort) {
+        this.name = name;
+        this.username = username;
+        this.passwort = passwort;
+    }
+
+    //Das hier ist der DTO von Register
+
+    public User(String name, String username, String passwort, String passwort2) {
+        this.name = name;
+        this.username = username;
+        this.passwort = passwort;
+        this.passwort2 = passwort2;
+    }
+
+    //Das hier ist der DTO von Login
+    public User(String username, String passwort) {
+        this.username = username;
+        this.passwort = passwort;
+    }
+
 }
