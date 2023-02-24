@@ -18,16 +18,27 @@
         <div>
             <span>Text: </span> <span th:text="${e.text}"></span>
         </div>
+        <div>
+        <!-- th:if="${user == sessionUser}"-->
+            <form action="#" method="post" th:action="@{/Entry}" th:object="${comment}">
+                <p>Text<input type="text" th:field="*{text}"></p>
 
+                <button type="submit">Kommentar abschicken</button>
+            </form>
+        </div>
+        <br>
         <div>
             <ul>
 
                 <li th:each="c : ${comments}" th:if="${e.id==c.getEntry().getId()}">
                     <div>
                         <span>Name: </span><span th:text="${c.user.name}"></span>
+                        <br>
                         <span>Date: </span><span th:text="${c.date}"></span>
+                        <br>
                         <span>Comment: </span><span th:text="${c.text}"></span>
                     </div>
+                        <br>
 
                 </li>
             </ul>
