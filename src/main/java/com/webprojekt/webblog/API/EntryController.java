@@ -1,12 +1,12 @@
 package com.webprojekt.webblog.API;
 
+import com.webprojekt.webblog.DAO.Comment;
 import com.webprojekt.webblog.DAO.Entry;
 import com.webprojekt.webblog.Services.WebBlogServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class EntryController {
@@ -19,6 +19,7 @@ public class EntryController {
         this.webBlogServices = webBlogServices;
     }
 
+
     @GetMapping("/Entry")
     public  String getEntry (Model model ) {
 
@@ -30,7 +31,23 @@ public class EntryController {
         webBlogServices.addEntry ("Hier ist ein Text3",3L);
         webBlogServices.addEntry ("Hier ist ein Text4",1L);
 
-        model.addAttribute("entries", webBlogServices.getEntriesByCreationDate ());
+        webBlogServices.addComment("testkommentar1", 1L, 1L);
+
+        model.addAttribute("entries", webBlogServices.getEntriesByCreationDate());
+        model.addAttribute("comments", webBlogServices.getCommentsByCreationDate());
+        model.addAttribute("comment", new Comment());
+
+        return "entries";
+    }
+
+    @PostMapping("/Entry")
+    public String addComment(@ModelAttribute Comment comment, Model model) {
+
+
+        this.webBlogServices.addComment(comment.getText(), 1L, 2L);
+        model.addAttribute("comment", new Comment());
+
+
 
         return "entries";
     }
