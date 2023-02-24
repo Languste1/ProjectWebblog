@@ -2,6 +2,7 @@ package com.webprojekt.webblog.Services;
 
 import com.webprojekt.webblog.DAO.Entry;
 import com.webprojekt.webblog.DAO.User;
+import com.webprojekt.webblog.Repositories.CommentRepository;
 import com.webprojekt.webblog.Repositories.EntryRepository;
 import com.webprojekt.webblog.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,13 @@ public class WebBlogServices {
     private UserRepository userRepository;
     private EntryRepository entryRepository;
 
+    private CommentRepository commentRepository;
+
     @Autowired
-    public WebBlogServices(UserRepository userRepository, EntryRepository entryRepository) {
+    public WebBlogServices(UserRepository userRepository, EntryRepository entryRepository, CommentRepository commentRepository) {
         this.userRepository = userRepository;
         this.entryRepository = entryRepository;
+        this.commentRepository = commentRepository;
     }
 // Wird eine Liste von Entries nach Datum sortiert
     public List<Entry> getEntriesByCreationDate() {
@@ -45,4 +49,8 @@ public class WebBlogServices {
         user.setName (name);
         userRepository.save (user);
     }
+
+
+
+
 }

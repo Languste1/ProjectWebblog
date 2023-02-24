@@ -3,24 +3,22 @@ package com.webprojekt.webblog.DAO;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
-@Entity(name = "entry")
+@Entity(name = "comment")
 @Table
-public class Entry {
+public class Comment {
 
     @Id
     @SequenceGenerator(
-            name= "entry_sequence",
-            sequenceName = "entry_sequence",
+            name= "comment_sequence",
+            sequenceName = "comment_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "entry_sequence"
+            generator = "comment_sequence"
     )
     @Column(
             nullable = false
@@ -28,7 +26,7 @@ public class Entry {
     private long id;
 
     @Column(
-            name = "entry_date",
+            name = "comment_date",
             nullable = false,
             columnDefinition = "TIMESTAMP"
     )
@@ -41,17 +39,18 @@ public class Entry {
     private String text;
 
     @ManyToOne
+    @JoinColumn(name = "idEntry", nullable = false)
+    private Entry entry;
+
+    @ManyToOne
     @JoinColumn(name = "idUser", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "entry")
-    private List<Comment> comment;
-
-    public Entry( String text) {
-        this.date= LocalDateTime.now ();
+    public Comment(String text) {
+        this.date = LocalDateTime.now();
         this.text = text;
     }
 
-    public Entry() {
+    public Comment() {
     }
 }
