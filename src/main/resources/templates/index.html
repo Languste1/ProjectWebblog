@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Titel</title>
-    <link rel="stylesheet" href="path/to/bulma.css"><script src="path/to/bulma.js"></script>
+    <title>Zwitscher</title>
 </head>
 <body>
+<h1 th:text="${'Welcome, unknown user'}" th:if="${sessionUser == null}"></h1>
+<h1 th:text="${'Welcome, ' + sessionUser.username}" th:if="${sessionUser != null}"></h1>
+<a th:href="@{/login}" th:if="${sessionUser == null}">Login</a>
+<a th:href="@{/register}">Sign up</a>
+
 
 </body>
 </html>

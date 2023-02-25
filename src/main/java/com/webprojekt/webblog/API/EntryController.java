@@ -1,8 +1,7 @@
 package com.webprojekt.webblog.API;
 
 import com.webprojekt.webblog.DAO.Comment;
-import com.webprojekt.webblog.DAO.Entry;
-import com.webprojekt.webblog.Services.WebBlogServices;
+import com.webprojekt.webblog.BussinesLayer.WebBlogServices;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,20 +9,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class EntryController {
 
     @Autowired
     WebBlogServices webBlogServices;
-
+/*
     @GetMapping("/")
     public String index(){
 
-        webBlogServices.addUser("Peter");
-        webBlogServices.addUser("Hanz");
-        webBlogServices.addUser("Kevin");
+        webBlogServices.addUser("Peter","AW123456");
+        webBlogServices.addUser("Hanz","AW123456");
+        webBlogServices.addUser("Kevin","AW123456");
         webBlogServices.addEntry("Hier ist ein Text1", 1L);
         webBlogServices.addEntry("Hier ist ein Text2", 2L);
         webBlogServices.addEntry("Hier ist ein Text3", 3L);
@@ -31,7 +29,7 @@ public class EntryController {
 
         return "redirect:/Entry";
     }
-
+*/
 
     @GetMapping("/Entry")
     public  String getEntry (Model model ) {
