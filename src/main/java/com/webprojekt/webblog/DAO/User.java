@@ -1,26 +1,31 @@
 package com.webprojekt.webblog.DAO;
 
+import com.webprojekt.webblog.Security.UserRoles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "user")
-@Table
-public class User {
+@Table(name = "user")
+public class User implements UserDetails {
     @Id
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
+            strategy = GenerationType.TABLE
     )
     @Column(
             nullable = false
@@ -58,15 +63,15 @@ public class User {
     nullable = false)
     @Size(min = 5, message = "your password must have at least 5 characters") //Theoretisch auch max implementierbar
     private String passwort;
-
-
+    @Column(
+            name = "email",
+            columnDefinition = "TEXT"
+    )
+    private String email;
     @Transient //Passwort wird von Tabelle ignoriert
     private String passwort2;
-
-
-
-    public User() {
-    }
+    @Enumerated(EnumType.STRING)
+    private UserRoles userRoles;
 
     public User(String name, String username, String passwort) {
         this.name = name;
@@ -89,4 +94,33 @@ public class User {
         this.passwort = passwort;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of (new SimpleGrantedAuthority (userRoles.name ()));
+    }
+
+    @Override
+    public String getPassword() {
+        return passwort;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 }
