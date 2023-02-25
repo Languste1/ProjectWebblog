@@ -40,6 +40,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Entry> entry;
 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comment;
+
     public User(String name) {
         this.name = name;
         this.isAdmin=false;

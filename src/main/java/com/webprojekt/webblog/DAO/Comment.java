@@ -3,7 +3,6 @@ package com.webprojekt.webblog.DAO;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -40,18 +39,20 @@ public class Comment {
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "idUser", nullable = false)
-    private User user;
-
-    @ManyToOne
     @JoinColumn(name = "idEntry", nullable = false)
     private Entry entry;
 
-    public Comment( String text) {
-        this.date= LocalDateTime.now ();
+    @ManyToOne
+    @JoinColumn(name = "idUser", nullable = false)
+    private User user;
+
+    public Comment(String text) {
+        this.date = LocalDateTime.now();
         this.text = text;
     }
 
     public Comment() {
     }
+
+
 }
