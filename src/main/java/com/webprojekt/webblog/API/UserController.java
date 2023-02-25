@@ -1,7 +1,7 @@
 package com.webprojekt.webblog.API;
 
 import com.webprojekt.webblog.DAO.User;
-import com.webprojekt.webblog.Services.WebBlogServices;
+import com.webprojekt.webblog.BussinesLayer.WebBlogServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

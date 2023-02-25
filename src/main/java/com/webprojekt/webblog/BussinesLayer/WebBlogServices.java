@@ -1,4 +1,4 @@
-package com.webprojekt.webblog.Services;
+package com.webprojekt.webblog.BussinesLayer;
 
 import com.webprojekt.webblog.DAO.Entry;
 import com.webprojekt.webblog.DAO.User;
@@ -8,7 +8,6 @@ import com.webprojekt.webblog.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.Optional;

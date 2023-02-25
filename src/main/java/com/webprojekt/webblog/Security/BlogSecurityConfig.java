@@ -64,7 +64,7 @@ public class BlogSecurityConfig extends WebSecurityConfiguration implements WebS
         http
                 .authorizeRequests((authorizeRequests) ->
                         authorizeRequests
-                                .antMatchers
+                                .antMatchers ().
                 )
                 .formLogin(withDefaults());
         return http.build();
@@ -72,7 +72,7 @@ public class BlogSecurityConfig extends WebSecurityConfiguration implements WebS
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers ("/images/**", "/js/**", "/webjars/**");
+        return (web) -> web.ignoring().antMatchers ("/images/**", "/js/**", "/webjars/**");
     }
 
 }
