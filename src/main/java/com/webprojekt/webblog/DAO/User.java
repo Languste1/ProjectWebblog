@@ -20,20 +20,18 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "user")
-@Table(name = "user")
-public class UserEntity implements UserDetails {
+@Entity
+@Table(name = "customers")
+public class User implements UserDetails {
     @Id
     @GeneratedValue(
-            strategy = GenerationType.TABLE
+            strategy = GenerationType.UUID
     )
     @Column(
             nullable = false
     )
-    private long id;
+    private String id;
 
-    /*@OneToMany(mappedBy = "user")
-    List<Session> sessions;*/
     @Column(
             name = "name",
             nullable = false,
@@ -41,17 +39,11 @@ public class UserEntity implements UserDetails {
 
     )
     private String name;
-    /*
-    @Column(
-            name = "is_user_admin"
 
-    )
-    boolean isAdmin;
-*/
     @OneToMany(mappedBy = "user")
     private List<Entry> entry;
 
-    public UserEntity(String name) {
+    public User(String name) {
         this.name = name;
     }
     @Column(name = "username",
@@ -68,28 +60,12 @@ public class UserEntity implements UserDetails {
             columnDefinition = "TEXT"
     )
     private String email;
-    @Transient //Passwort wird von Tabelle ignoriert
-    private String passwort2;
+
     @Enumerated(EnumType.STRING)
     private UserRoles userRoles;
 
-    public UserEntity(String name, String username, String password) {
+    public User(String name, String username, String password) {
         this.name = name;
-        this.username = username;
-        this.password = password;
-    }
-
-    //Das hier ist der DTO von Register
-
-    public UserEntity(String name, String username, String password, String passwort2) {
-        this.name = name;
-        this.username = username;
-        this.password = password;
-        this.passwort2 = passwort2;
-    }
-
-    //Das hier ist der DTO von Login
-    public UserEntity(String username, String password) {
         this.username = username;
         this.password = password;
     }
@@ -121,6 +97,6 @@ public class UserEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

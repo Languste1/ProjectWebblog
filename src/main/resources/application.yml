@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-circular-references: true
   datasource:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:3307/webprojekt
     username: root

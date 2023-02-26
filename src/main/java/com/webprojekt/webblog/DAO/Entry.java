@@ -40,7 +40,7 @@ public class Entry {
 
     @ManyToOne
     @JoinColumn(name = "idUser", nullable = false)
-    private UserEntity user;
+    private User user;
 
     public Entry( String text) {
         this.date= LocalDateTime.now ();

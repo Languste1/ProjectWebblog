@@ -1,14 +1,17 @@
 package com.webprojekt.webblog.BussinesLayer;
 
-import com.webprojekt.webblog.DAO.UserEntity;
+import com.webprojekt.webblog.DAO.User;
 import com.webprojekt.webblog.Repositories.UserRepository;
 import com.webprojekt.webblog.Security.AuthenticationRequest;
 import com.webprojekt.webblog.Security.AuthenticationResponse;
 import com.webprojekt.webblog.Security.RegisterRequest;
 import com.webprojekt.webblog.Security.UserRoles;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +24,7 @@ private final JwtService jwtService;
 private  final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        var user = UserEntity.builder ()
+        var user = User.builder ()
                 .name (request.getName ())
                 .username (request.getUsername ())
                 .password (passwordEncoder.encode (request.getPassword ()))
@@ -35,7 +38,7 @@ private  final AuthenticationManager authenticationManager;
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+   /* public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate (
                 new UsernamePasswordAuthenticationToken (
                         request.getUsername (),
@@ -48,5 +51,25 @@ private  final AuthenticationManager authenticationManager;
         return AuthenticationResponse.builder()
                 .token (jwtToken).
                 build();
-    }
+    }*/
+   public AuthenticationResponse authenticate(AuthenticationRequest request) {
+       try {
+           authenticationManager.authenticate (
+                   new UsernamePasswordAuthenticationToken (
+                           request.getUsername (),
+                           request.getPassword ()
+                   )
+           );
+       } catch (org.springframework.security.core.AuthenticationException e) {
+           throw new BadCredentialsException ("Invalid username or password", e);
+       }
+
+       User user = userRepository.findByUsername(request.getUsername())
+               .orElseThrow(() -> new UsernameNotFoundException ("User not found"));
+
+       String jwtToken = jwtService.generateToken(user);
+       return AuthenticationResponse.builder()
+               .token (jwtToken)
+               .build();
+   }
 }
