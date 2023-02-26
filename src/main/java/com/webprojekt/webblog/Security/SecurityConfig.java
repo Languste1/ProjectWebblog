@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .requestMatchers ("/").permitAll() // allow access to login page
+                .requestMatchers ("/","/registration","/login").permitAll() // allow access to login page
                 .requestMatchers ("/WebBlog/User**").hasAnyRole("USER","ADMIN","MODERATOR")
                 .requestMatchers ("/WebBlog/User/isModerator**").hasAnyRole("ADMIN","MODERATOR")
                 .requestMatchers ("/WebBlog/User/isModerator/isAdmin**").hasAnyRole("ADMIN")
