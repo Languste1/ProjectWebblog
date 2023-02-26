@@ -41,18 +41,18 @@ public class User implements UserDetails {
 
     )
     private String name;
+    /*
     @Column(
             name = "is_user_admin"
 
     )
     boolean isAdmin;
-
+*/
     @OneToMany(mappedBy = "user")
     private List<Entry> entry;
 
     public User(String name) {
         this.name = name;
-        this.isAdmin=false;
     }
     @Column(name = "username",
     nullable = false, unique = true)
@@ -62,7 +62,7 @@ public class User implements UserDetails {
     @Column(name = "passwort",
     nullable = false)
     @Size(min = 5, message = "your password must have at least 5 characters") //Theoretisch auch max implementierbar
-    private String passwort;
+    private String password;
     @Column(
             name = "email",
             columnDefinition = "TEXT"
@@ -73,25 +73,25 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRoles userRoles;
 
-    public User(String name, String username, String passwort) {
+    public User(String name, String username, String password) {
         this.name = name;
         this.username = username;
-        this.passwort = passwort;
+        this.password = password;
     }
 
     //Das hier ist der DTO von Register
 
-    public User(String name, String username, String passwort, String passwort2) {
+    public User(String name, String username, String password, String passwort2) {
         this.name = name;
         this.username = username;
-        this.passwort = passwort;
+        this.password = password;
         this.passwort2 = passwort2;
     }
 
     //Das hier ist der DTO von Login
-    public User(String username, String passwort) {
+    public User(String username, String password) {
         this.username = username;
-        this.passwort = passwort;
+        this.password = password;
     }
 
     @Override
@@ -101,7 +101,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return passwort;
+        return password;
     }
 
     @Override

@@ -1,11 +1,16 @@
 package com.webprojekt.webblog.DAO;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-/*import java.util.UUID;
-
+import java.util.UUID;
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table
 @Data
 @Entity
@@ -20,13 +25,8 @@ public class Session {
     nullable = false)
     private Instant expiresAt;
 
-    public Session () {
-
-    }
-
     public Session(User user, Instant expiresAt) {
         this.user = user;
         this.expiresAt = expiresAt;
     }
 }
-*/

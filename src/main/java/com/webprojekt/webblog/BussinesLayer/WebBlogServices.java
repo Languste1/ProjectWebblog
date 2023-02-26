@@ -4,6 +4,7 @@ import com.webprojekt.webblog.DAO.Entry;
 import com.webprojekt.webblog.DAO.User;
 import com.webprojekt.webblog.Repositories.EntryRepository;
 /*import com.webprojekt.webblog.Repositories.SessionRepository;*/
+import com.webprojekt.webblog.Repositories.SessionRepository;
 import com.webprojekt.webblog.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -16,14 +17,15 @@ import java.util.Optional;
 public class WebBlogServices {
     private UserRepository userRepository;
     private EntryRepository entryRepository;
-    /*private SessionRepository sessionRepository;*/
+    private SessionRepository sessionRepository;
 
     @Autowired
-    public WebBlogServices(UserRepository userRepository, EntryRepository entryRepository) {
+    public WebBlogServices(UserRepository userRepository, EntryRepository entryRepository, SessionRepository sessionRepository) {
         this.userRepository = userRepository;
         this.entryRepository = entryRepository;
-        /*this.sessionRepository = sessionRepository;*/
+        this.sessionRepository = sessionRepository;
     }
+
 
     // Wird eine Liste von Entries nach Datum sortiert
     public List<Entry> getEntriesByCreationDate() {
@@ -51,7 +53,7 @@ public class WebBlogServices {
         User user = new User(name);
         user.setName(name);
         user.setUsername(username);
-        user.setPasswort(passwort);
+        user.setPassword (passwort);
         user.setPasswort2(passwort2);
         userRepository.save(user);
     }
@@ -60,11 +62,13 @@ public class WebBlogServices {
         return userRepository.findAll();
     }
 
+/*
+    public void addSession(String name, String username, String password, String passwort2) {
+        Optional<User> optionalUser = userRepository.findByUsernameAndPassword(username, password);
+        if () {
 
-    public void addSession(String name, String username, String passwort, String passwort2) {
-        if (passwort.equals(passwort2)) {
-            addUser(name, username, passwort, passwort2);
+            addUser(name, username, password, passwort2);
         }
     }
-
+*/
 }
