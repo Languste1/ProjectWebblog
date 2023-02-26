@@ -36,35 +36,33 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf ()
-                .disable ()
-                .authorizeRequests ()
-                .requestMatchers ("/","/login","/registration","/entries").permitAll () // allow access to login page
-                .requestMatchers ("/WebBlog/User**").hasAnyRole ("USER", "ADMIN", "MODERATOR")
-                .requestMatchers ("/WebBlog/User/isModerator**").hasAnyRole ("ADMIN", "MODERATOR")
-                .requestMatchers ("/WebBlog/User/isModerator/isAdmin**").hasAnyRole ("ADMIN")
-                .anyRequest ().authenticated () // all other requests require authentication
-                .and ()
-                .formLogin () // enable form-based login
-                .loginPage ("/login") // specify the login page URL
-                .defaultSuccessUrl ("/") // redirect to homepage after successful login
-                .and ()
-                .logout () // enable logout
-                .logoutUrl ("/logout") // specify the logout URL
-                .logoutSuccessUrl ("/login") // redirect to login page after successful logout
-                .and ()
+                .csrf()
+                .disable()
+                .authorizeRequests()
+                .requestMatchers ("/").permitAll() // allow access to login page
+                .requestMatchers ("/WebBlog/User**").hasAnyRole("USER","ADMIN","MODERATOR")
+                .requestMatchers ("/WebBlog/User/isModerator**").hasAnyRole("ADMIN","MODERATOR")
+                .requestMatchers ("/WebBlog/User/isModerator/isAdmin**").hasAnyRole("ADMIN")
+                .anyRequest().authenticated() // all other requests require authentication
+                .and()
+                .formLogin() // enable form-based login
+                .loginPage("/login") // specify the login page URL
+                .defaultSuccessUrl("/") // redirect to homepage after successful login
+                .and()
+                .logout() // enable logout
+                .logoutUrl("/logout") // specify the logout URL
+                .logoutSuccessUrl("/login") // redirect to login page after successful logout
+                .and()
                 .sessionManagement ()
                 .sessionCreationPolicy (SessionCreationPolicy.STATELESS)
-                .and ()
-                .rememberMe ()
-                .key ("SECRET_KEY")
-                .tokenValiditySeconds (86400)
                 .and ()
                 .authenticationProvider (authenticationProvider)
                 .addFilterBefore (jwtAthFilter, UsernamePasswordAuthenticationFilter.class)
         ;
-        return http.build ();
+    return http.build();
     }
+
+
 }
 
 
