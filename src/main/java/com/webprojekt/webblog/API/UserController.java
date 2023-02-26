@@ -32,12 +32,17 @@ public class UserController {
         return "registration";
     }
     @PostMapping("/registration")
-    public ResponseEntity<AuthenticationResponse> register(
-            @RequestParam RegisterRequest request
-    ){
-        return ResponseEntity.ok (authenticationService.register(request));
-
+    public String registerUser(@ModelAttribute("user") RegisterRequest request, Model model) {
+        try {
+            authenticationService.register(request);
+            model.addAttribute("message", "User registered successfully!");
+            return "registration-success";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "registration-failure";
+        }
     }
+
 
 
 
