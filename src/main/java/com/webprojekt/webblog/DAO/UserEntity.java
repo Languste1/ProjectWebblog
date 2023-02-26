@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity(name = "user")
 @Table(name = "user")
-public class User implements UserDetails {
+public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(
             strategy = GenerationType.TABLE
@@ -51,7 +51,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Entry> entry;
 
-    public User(String name) {
+    public UserEntity(String name) {
         this.name = name;
     }
     @Column(name = "username",
@@ -73,7 +73,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRoles userRoles;
 
-    public User(String name, String username, String password) {
+    public UserEntity(String name, String username, String password) {
         this.name = name;
         this.username = username;
         this.password = password;
@@ -81,7 +81,7 @@ public class User implements UserDetails {
 
     //Das hier ist der DTO von Register
 
-    public User(String name, String username, String password, String passwort2) {
+    public UserEntity(String name, String username, String password, String passwort2) {
         this.name = name;
         this.username = username;
         this.password = password;
@@ -89,7 +89,7 @@ public class User implements UserDetails {
     }
 
     //Das hier ist der DTO von Login
-    public User(String username, String password) {
+    public UserEntity(String username, String password) {
         this.username = username;
         this.password = password;
     }

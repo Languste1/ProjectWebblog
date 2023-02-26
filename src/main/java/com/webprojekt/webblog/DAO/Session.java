@@ -19,13 +19,13 @@ public class Session {
     private String id = UUID.randomUUID().toString();
 
     @ManyToOne
-    private User user;
+    private UserEntity user;
 
     @Column(name = "expireAt",
     nullable = false)
     private Instant expiresAt;
 
-    public Session(User user, Instant expiresAt) {
+    public Session(UserEntity user, Instant expiresAt) {
         this.user = user;
         this.expiresAt = expiresAt;
     }

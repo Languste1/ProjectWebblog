@@ -81,6 +81,11 @@ public class BlogSecurityConfig extends WebSecurityConfiguration implements WebS
                 .anyRequest ()
                 .authenticated ()
                 .and ()
+                .formLogin (
+                        form -> form.defaultSuccessUrl ("/account/login")
+                                .loginPage ("login")
+                                .failureUrl ("login?error=true")
+                )
                 .sessionManagement ()
                 .sessionCreationPolicy (SessionCreationPolicy.STATELESS)
                 .and ()

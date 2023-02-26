@@ -1,6 +1,6 @@
 package com.webprojekt.webblog.BussinesLayer;
 
-import com.webprojekt.webblog.DAO.User;
+import com.webprojekt.webblog.DAO.UserEntity;
 import com.webprojekt.webblog.Repositories.UserRepository;
 import com.webprojekt.webblog.Security.AuthenticationRequest;
 import com.webprojekt.webblog.Security.AuthenticationResponse;
@@ -21,7 +21,7 @@ private final JwtService jwtService;
 private  final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        var user = User.builder ()
+        var user = UserEntity.builder ()
                 .name (request.getName ())
                 .username (request.getUsername ())
                 .password (passwordEncoder.encode (request.getPassword ()))
