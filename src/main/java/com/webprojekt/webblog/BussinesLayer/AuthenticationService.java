@@ -38,6 +38,21 @@ public class AuthenticationService {
                 .build();
     }
 
+    public AuthenticationResponse registerAdmin(RegisterRequest request) {
+        var user = User.builder ()
+                .name (request.getName ())
+                .username (request.getUsername ())
+                .password (passwordEncoder.encode (request.getPassword ()))
+                .email (request.getEmail ())
+                .userRoles (UserRoles.ADMIN)
+                .build ();
+        userRepository.save (user);
+        var jwtToken = jwtService.generateToken (user);
+        return AuthenticationResponse.builder()
+                .token (jwtToken)
+                .build();
+    }
+
     /* public AuthenticationResponse authenticate(AuthenticationRequest request) {
          authenticationManager.authenticate (
                  new UsernamePasswordAuthenticationToken (

@@ -31,6 +31,8 @@ public class AnonController {
 
     @GetMapping("/")
     public String index(){
+
+        authenticationService.registerAdmin (new RegisterRequest ("ADMIN","admin","admin1234","admin@admin"));
         return "index";
     }
 
@@ -43,7 +45,12 @@ public class AnonController {
                 request.getName (),
                 request.getUsername (),
                 request.getEmail (),
-                request.getPassword ()));
+                request.getPassword ())
+        );
+
+
+
+
         return "registration";
     }
 
