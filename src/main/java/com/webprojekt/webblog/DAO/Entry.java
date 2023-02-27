@@ -43,6 +43,9 @@ public class Entry {
     @JoinColumn(name = "idUser", nullable = false)
     private User user;
 
+    @OneToMany(mappedBy = "entry")
+    private List<Comment> comment;
+
     public Entry( String text) {
         this.date= LocalDateTime.now ();
         this.text = text;
