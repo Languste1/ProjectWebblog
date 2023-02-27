@@ -19,3 +19,4 @@ server:
   port: 8082
 # Zeile 2 aufpassen. Es muss bei euch 3306 sein / name ihr Schema
 # serverport muss 8080 bei Ihnen sein
+#
