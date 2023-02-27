@@ -53,4 +53,8 @@ public class Entry {
 
     public Entry() {
     }
+
+    @OneToMany(mappedBy = "entry")
+    private List<Comment> comment;
+
 }

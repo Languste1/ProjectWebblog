@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head>
+  <title>Registration Form</title>
   <meta charset="UTF-8">
-  <title>Titel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="path/to/bulma.css"><script src="path/to/bulma.js"></script>
 </head>
 <body>
 <h1>Sign up</h1>
-<form th:action="@{/registration}" th:object="${user}" method="post">
-  Name: <input type="text" th:field="*{name}"><br/>
+<h2>Registration Form</h2>
+<form action="#" th:action="@{/registration}" th:object="${user}" method="post">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" th:field="*{name}" />
 
-  Username: <input type="text" th:field="*{username}"><br/>
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username" th:field="*{username}" />
 
-  Password: <input type="password" th:field="*{passwort}"><br/>
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" th:field="*{email}" />
 
-  Password repeat: <input type="password" th:field="*{passwort2}"><br/>
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" th:field="*{password}" />
 
   <button type="submit">Register</button>
 </form>
 
-<ul >
-  <li th:each="e : ${users}">
-    <div>
-      <span>Name: </span><span th:text="${e.name}"></span> <span>Username: </span>  <span th:text="${e.username}"></span>
-    </div>
-  </li>
-</ul>
-
-
+<p th:text="${message}" style="color:green"></p>
+<p th:text="${error}" style="color:red"></p>
 </body>
 </html>
+
