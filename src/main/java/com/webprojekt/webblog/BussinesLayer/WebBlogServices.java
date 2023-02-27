@@ -8,7 +8,6 @@ import com.webprojekt.webblog.Repositories.EntryRepository;
 /*import com.webprojekt.webblog.Repositories.SessionRepository;*/
 import com.webprojekt.webblog.Repositories.UserRepository;
 import com.webprojekt.webblog.Security.UserRoles;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -85,11 +84,30 @@ public class WebBlogServices  {
         return user.get ().getId ();
     }
 
-    public void adminRechte(String id){
-        Optional<User> user = userRepository.findById (id);
-        //User user =
+    public void upgrade (String id){
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()) {
+            User foundUser = user.get();
+            foundUser.setUserRoles (UserRoles.ADMIN); // Beispielhaft wird hier die Admin-Eigenschaft auf "true" gesetzt
+            userRepository.save(foundUser);
+        } else {
+            // Fehlerbehandlung, falls der Benutzer nicht gefunden wurde
+        }
+    }
 
+    public void downgrade (String id){
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()) {
+            User foundUser = user.get();
+            foundUser.setUserRoles (UserRoles.USER); // Beispielhaft wird hier die Admin-Eigenschaft auf "true" gesetzt
+            userRepository.save(foundUser);
+        } else {
+            // Fehlerbehandlung, falls der Benutzer nicht gefunden wurde
+        }
+    }
 
+    public List<User> getAllUsers(){
+        return userRepository.findAll ();
     }
 
 }

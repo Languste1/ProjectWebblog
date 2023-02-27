@@ -2,7 +2,7 @@ spring:
   main:
     allow-circular-references: true
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/webprojekt
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3307/webprojekt
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -16,7 +16,7 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
 server:
-  port: 8080
+  port: 8082
 # Zeile 2 aufpassen. Es muss bei euch 3306 sein / name ihr Schema
 # serverport muss 8080 bei Ihnen sein
 #
