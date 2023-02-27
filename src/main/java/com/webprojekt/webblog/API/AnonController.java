@@ -78,7 +78,7 @@ public class AnonController {
         try {
             authenticationService.register(request);
             model.addAttribute("message", "User registered successfully!");
-            return "login";
+            return "redirect:/";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "registration";
