@@ -88,7 +88,7 @@ public class WebBlogServices  {
         Optional<User> user = userRepository.findById(id);
         if(user.isPresent()) {
             User foundUser = user.get();
-            foundUser.setUserRoles (UserRoles.ADMIN); // Beispielhaft wird hier die Admin-Eigenschaft auf "true" gesetzt
+            foundUser.setUserRoles (UserRoles.MODERATOR); // Beispielhaft wird hier die Admin-Eigenschaft auf "true" gesetzt
             userRepository.save(foundUser);
         } else {
             // Fehlerbehandlung, falls der Benutzer nicht gefunden wurde
