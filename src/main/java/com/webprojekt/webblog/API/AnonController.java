@@ -32,7 +32,7 @@ public class AnonController {
     @GetMapping("/")
     public String index(){
 
-        authenticationService.registerAdmin (new RegisterRequest ("ADMIN","admin","admin1234","admin@admin"));
+
         return "index";
     }
 
