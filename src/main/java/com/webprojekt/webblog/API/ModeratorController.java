@@ -19,12 +19,7 @@ public class ModeratorController {
         this.authenticationService = authenticationService;
     }
 
-    @GetMapping("/users")
-    public String getAllUsers(Model model) {
 
-        model.addAttribute("users", webBlogServices.getAllUsers ());
-        return "users";
-    }
 
 
 

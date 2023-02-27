@@ -17,18 +17,6 @@ public class AdminController {
         this.webBlogServices = webBlogServices;
     }
 
-    @PostMapping("/users/{id}/upgrade")
-    public String upgradeUser(@PathVariable("id") String id, Model model) {
-        webBlogServices.upgrade(id);
-        model.addAttribute("users",  webBlogServices.getAllUsers ());
-        return "users";
-    }
 
-    @PutMapping("/users/{id}/downgrade")
-    public String downgradeUser(@PathVariable("id") String id, Model model) {
-        webBlogServices.downgrade(id);
-        model.addAttribute("users", webBlogServices.getAllUsers ());
-        return "users";
-    }
 
 }

@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/")
 @Controller
@@ -148,6 +145,26 @@ public class AnonController {
         return "redirect:/";
     }
 
+    @GetMapping("/users")
+    public String getAllUsers(Model model) {
+
+        model.addAttribute("users", webBlogServices.getAllUsers ());
+        return "users";
+    }
+
+    @PostMapping("/users/{id}/upgrade")
+    public String upgradeUser(@PathVariable("id") String id, Model model) {
+        webBlogServices.upgrade(id);
+        model.addAttribute("users",  webBlogServices.getAllUsers ());
+        return "users";
+    }
+
+    @PutMapping("/users/{id}/downgrade")
+    public String downgradeUser(@PathVariable("id") String id, Model model) {
+        webBlogServices.downgrade(id);
+        model.addAttribute("users", webBlogServices.getAllUsers ());
+        return "users";
+    }
 }
 
 
