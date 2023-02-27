@@ -18,10 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-// Normelerweise wäre es einfacher mit WebSecurityConfiguratorAdapter zu extenden und die methoden zu überschreiben
-//aber es funktioniert nicht bei mir
-@Configuration // anotation das sagt, hey du bist die config file für security
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
@@ -35,35 +32,59 @@ public class SecurityConfig {
         this.authenticationProvider = authenticationProvider;
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf()
+                .csrf() // disable CSRF protection
                 .disable()
                 .authorizeRequests()
+                // allow access to static resources (CSS, JS, etc.) at common locations
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .requestMatchers ("/**","/registration**","/login**","/entries","/dummies**").permitAll() // allow access to login page
+                // allow access to certain pages without authentication
+                .requestMatchers ("/**","/registration**","/login**","/entries","/dummies**").permitAll()
+                // allow access to user-related pages for users, moderators, and admins
                 .requestMatchers ("/WebBlog/User**").hasAnyRole("USER","ADMIN","MODERATOR")
+                // allow access to moderator-related pages for moderators and admins
                 .requestMatchers ("/WebBlog/User/isModerator**").hasAnyRole("ADMIN","MODERATOR")
+                // allow access to admin-related pages for admins only
                 .requestMatchers ("/WebBlog/User/isModerator/isAdmin**").hasAnyRole("ADMIN")
-                .anyRequest().authenticated() // all other requests require authentication
+                // require authentication for all other requests
+                .anyRequest().authenticated()
                 .and()
-                .formLogin() // enable form-based login
-                .loginPage("/login") // specify the login page URL
-                .defaultSuccessUrl("/") // redirect to homepage after successful login
-                .and ()
-                .logout() // enable logout
-                .logoutUrl("/logout") // specify the logout URL
-                .logoutSuccessUrl("/login") // redirect to login page after successful logout
+                // enable form-based login
+                .formLogin()
+                // specify the login page URL
+                .loginPage("/login")
+                // redirect to homepage after successful login
+                .defaultSuccessUrl("/")
+                // set authentication success handler to create and set JWT token cookie
+                .successHandler((request, response, authentication) -> {
+                    String token = ((AuthenticationResponse) authentication.getPrincipal()).getToken();
+                    Cookie cookie = new Cookie("jwtToken", token);
+                    cookie.setPath("/");
+                    cookie.setMaxAge(60 * 60 * 24); // set cookie expiration to 1 day
+                    response.addCookie(cookie);
+                })
                 .and()
-                .sessionManagement ()
-                .sessionCreationPolicy (SessionCreationPolicy.STATELESS)
-                .and ()
-                .authenticationProvider (authenticationProvider)
-                .addFilterBefore (jwtAthFilter, UsernamePasswordAuthenticationFilter.class)
-        ;
-    return http.build();
+                // enable logout
+                .logout()
+                // specify the logout URL
+                .logoutUrl("/logout")
+                // redirect to login page after successful logout
+                .logoutSuccessUrl("/login")
+                .and()
+                // configure session management to be stateless
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                // set authentication provider
+                .authenticationProvider(authenticationProvider)
+                // add JWT authentication filter before the username/password authentication filter
+                .addFilterBefore(jwtAthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 /*
 .and ()

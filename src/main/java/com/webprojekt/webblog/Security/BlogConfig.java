@@ -23,12 +23,14 @@ public class BlogConfig {
         this.userRepository = userRepository;
     }
 
+    // Ein Benutzerdetailsdienst, der den Benutzer anhand des Benutzernamens aus der Datenbank sucht
     @Bean
     protected UserDetailsService userDetailsService() {
         return username -> userRepository.findByUsername (username)
                 .orElseThrow (() -> new UsernameNotFoundException ("User not found"));
     }
-    // DAO userdetails und encoding
+
+    // Ein DAO-Authentifizierungsanbieter, der den Benutzerdetailsdienst und den Passwort-Encoder verwendet
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider ();
@@ -37,11 +39,13 @@ public class BlogConfig {
         return authProvider;
     }
 
+    // Ein Passwort-Encoder, der das Passwort des Benutzers verschlüsselt
     @Bean
     public PasswordEncoder passwordEncoder() {
-         return new BCryptPasswordEncoder (10);
+        return new BCryptPasswordEncoder (10);
     }
 
+    // Ein Authentifizierungs-Manager, der von Spring Security verwendet wird
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager ();
