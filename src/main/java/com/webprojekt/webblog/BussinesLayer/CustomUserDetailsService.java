@@ -3,6 +3,7 @@ package com.webprojekt.webblog.BussinesLayer;
 import com.webprojekt.webblog.DAO.User;
 import com.webprojekt.webblog.Repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,11 +11,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@AllArgsConstructor
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
-
+@Autowired
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

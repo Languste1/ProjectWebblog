@@ -63,7 +63,7 @@ public class AnonController {
     @GetMapping("/login")
     public String login(@ModelAttribute AuthenticationRequest request, Model model){
         model.addAttribute ("login",new AuthenticationRequest ());
-        return "login";
+        return "/login";
     }
 
     @PostMapping("/login")
@@ -72,8 +72,8 @@ public class AnonController {
             Model model,
             HttpServletRequest httpRequest,
             HttpServletResponse httpResponse
-    ){
-        try{
+    ) {
+        try {
             AuthenticationResponse authenticationResponse = authenticationService.authenticate(request);
             String token = authenticationResponse.getToken();
             Cookie cookie = new Cookie("jwtToken", token);
@@ -81,11 +81,31 @@ public class AnonController {
             cookie.setPath("/");
             httpResponse.addCookie(cookie);
             return "redirect:/"; // redirect to home page after successful authentication
-        } catch(AuthenticationException e){
+        } catch (AuthenticationException e) {
             model.addAttribute("error", "Invalid username or password");
+            model.addAttribute("login", new AuthenticationRequest()); // add the login object to the model to prepopulate the form
             return "login";
         }
     }
 
+/*
+    @PostMapping("/login")
+    public String loginUser(Model model, @ModelAttribute("authenticationRequest") AuthenticationRequest authenticationRequest) {
+
+        AuthenticationResponse response = authenticationService.authenticate(authenticationRequest);
+        model.addAttribute("authenticationResponse", response);
+
+        return "/"; // Hier geben wir den Namen der HTML-View zurück, die das Ergebnis darstellt
+    }
+*/
+
+    @GetMapping("/entries")
+    public  String getEntries(){
+
+        return "entries";
+    }
 
 }
+
+
+

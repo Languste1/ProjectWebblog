@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-private final UserRepository userRepository;
-private  final PasswordEncoder passwordEncoder;
-private final JwtService jwtService;
-private  final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private  final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private  final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder ()
@@ -38,38 +38,38 @@ private  final AuthenticationManager authenticationManager;
                 .build();
     }
 
-   /* public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate (
-                new UsernamePasswordAuthenticationToken (
-                        request.getUsername (),
-                        request.getPassword ()
-                )
-        );
-        var user = userRepository.findByUsername (request.getUsername ())
-                .orElseThrow ();
-        var jwtToken = jwtService.generateToken (user);
+    /* public AuthenticationResponse authenticate(AuthenticationRequest request) {
+         authenticationManager.authenticate (
+                 new UsernamePasswordAuthenticationToken (
+                         request.getUsername (),
+                         request.getPassword ()
+                 )
+         );
+         var user = userRepository.findByUsername (request.getUsername ())
+                 .orElseThrow ();
+         var jwtToken = jwtService.generateToken (user);
+         return AuthenticationResponse.builder()
+                 .token (jwtToken).
+                 build();
+     }*/
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        try {
+            authenticationManager.authenticate (
+                    new UsernamePasswordAuthenticationToken (
+                            request.getUsername (),
+                            request.getPassword ()
+                    )
+            );
+        } catch (org.springframework.security.core.AuthenticationException e) {
+            throw new BadCredentialsException ("Invalid username or password", e);
+        }
+
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException ("User not found"));
+
+        String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
-                .token (jwtToken).
-                build();
-    }*/
-   public AuthenticationResponse authenticate(AuthenticationRequest request) {
-       try {
-           authenticationManager.authenticate (
-                   new UsernamePasswordAuthenticationToken (
-                           request.getUsername (),
-                           request.getPassword ()
-                   )
-           );
-       } catch (org.springframework.security.core.AuthenticationException e) {
-           throw new BadCredentialsException ("Invalid username or password", e);
-       }
-
-       User user = userRepository.findByUsername(request.getUsername())
-               .orElseThrow(() -> new UsernameNotFoundException ("User not found"));
-
-       String jwtToken = jwtService.generateToken(user);
-       return AuthenticationResponse.builder()
-               .token (jwtToken)
-               .build();
-   }
+                .token (jwtToken)
+                .build();
+    }
 }
