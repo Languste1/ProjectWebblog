@@ -3,14 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Titel</title>
-    <link rel="stylesheet" href="path/to/bulma.css">
-    <script src="path/to/bulma.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" th:href="@{/newSheet.css}">
 </head>
 <body>
-<h1>Hier sind die Beiträge</h1>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item">
+                Home
+            </a>
+        </div>
+
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+                    <a class="button is-primary">
+                        <strong>Sign up</strong>
+                    </a>
+                    <a class="button is-light">
+                        Log in
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<h1 class="has-text-centered">Hier sind die Beiträge</h1>
 <br>
-<ul>
+<ul >
     <li th:each="e : ${entries}">
+        <div class="container1">
         <div>
             <span>Date: </span><span th:text="${e.date}"></span>
             <span>Name: </span> <span th:text="${e.user.name}"></span>
@@ -35,6 +72,8 @@
                         <span>Name: </span><span th:text="${c.user.name}"></span>
                         <br>
                         <span>Date: </span><span th:text="${c.date}"></span>
+                    </div>
+                    <div>
                         <br>
                         <span>Comment: </span><span th:text="${c.text}"></span>
                     </div>
@@ -42,6 +81,10 @@
 
                 </li>
             </ul>
+        </div>
+
+
+
         </div>
 
     </li>
