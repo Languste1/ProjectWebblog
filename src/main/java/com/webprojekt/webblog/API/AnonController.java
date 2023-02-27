@@ -2,6 +2,8 @@ package com.webprojekt.webblog.API;
 
 import com.webprojekt.webblog.BussinesLayer.AuthenticationService;
 import com.webprojekt.webblog.BussinesLayer.WebBlogServices;
+import com.webprojekt.webblog.DAO.Comment;
+import com.webprojekt.webblog.DAO.User;
 import com.webprojekt.webblog.Security.AuthenticationRequest;
 import com.webprojekt.webblog.Security.AuthenticationResponse;
 import com.webprojekt.webblog.Security.RegisterRequest;
@@ -30,10 +32,27 @@ public class AnonController {
     }
 
     @GetMapping("/")
-    public String index(){
+    public String index(Model model){
+      //  webBlogServices.addAdmin (new User ("admin",""));
 
+        model.addAttribute("entries", webBlogServices.getEntriesByCreationDate());
+        model.addAttribute("comments", webBlogServices.getCommentsByCreationDate());
+        model.addAttribute("comment", new Comment());
 
         return "index";
+    }
+
+    @PostMapping("/")
+    public String addComment(@ModelAttribute Comment comment, Model model, HttpServletRequest request) {
+
+        Long entryId = Long.parseLong(request.getParameter("entryId"));
+
+        this.webBlogServices.addComment(comment.getText(), webBlogServices.findIdByUsername("admin"), entryId );
+        model.addAttribute("comment", new Comment());
+
+
+
+        return "redirect:/";
     }
 
     @GetMapping("/registration")
@@ -110,6 +129,23 @@ public class AnonController {
     public  String getEntries(){
 
         return "entries";
+    }
+
+    @GetMapping("/dummies")
+    public String getDummies(){
+        authenticationService.registerAdmin (new RegisterRequest ("admin","admin","admin1234","admin@admin.com"));
+    //    authenticationService.register (new RegisterRequest ("Dummy","Dummy Dummyson2","dummy1234","dummy@dummy.com"));
+    //    authenticationService.register (new RegisterRequest ("Dummy2","Dummy Dummyson3","dummy1234","dummy@dummy.com"));
+    //    authenticationService.register (new RegisterRequest ("Dummy3","Dummy Dummyson4","dummy1234","dummy@dummy.com"));
+    //    authenticationService.register (new RegisterRequest ("Dummy4","Dummy Dummyson5","dummy1234","dummy@dummy.com"));
+    //dummy
+
+
+        webBlogServices.addEntry("Hier ist ein Text1", webBlogServices.findIdByUsername("admin"));
+        webBlogServices.addEntry("Hier ist ein Text2", webBlogServices.findIdByUsername("admin"));
+        webBlogServices.addEntry("Hier ist ein Text3", webBlogServices.findIdByUsername("admin"));
+        webBlogServices.addEntry("Hier ist ein Text4", webBlogServices.findIdByUsername("admin"));
+        return "redirect:/";
     }
 
 }

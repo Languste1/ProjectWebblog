@@ -1,10 +1,13 @@
 package com.webprojekt.webblog.BussinesLayer;
 
+import com.webprojekt.webblog.DAO.Comment;
+import com.webprojekt.webblog.Repositories.CommentRepository;
 import com.webprojekt.webblog.DAO.Entry;
 import com.webprojekt.webblog.DAO.User;
 import com.webprojekt.webblog.Repositories.EntryRepository;
 /*import com.webprojekt.webblog.Repositories.SessionRepository;*/
 import com.webprojekt.webblog.Repositories.UserRepository;
+import com.webprojekt.webblog.Security.UserRoles;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -17,11 +20,17 @@ import java.util.Optional;
 public class WebBlogServices  {
     private UserRepository userRepository;
     private EntryRepository entryRepository;
-@Autowired
-    public WebBlogServices(UserRepository userRepository, EntryRepository entryRepository) {
+    private CommentRepository commentRepository;
+
+    @Autowired
+    public WebBlogServices(UserRepository userRepository, EntryRepository entryRepository, CommentRepository commentRepository) {
         this.userRepository = userRepository;
         this.entryRepository = entryRepository;
+        this.commentRepository = commentRepository;
     }
+
+
+
 
     // Wird eine Liste von Entries nach Datum sortiert
     public List<Entry> getEntriesByCreationDate() {
@@ -51,5 +60,36 @@ public class WebBlogServices  {
         userRepository.save (user);
     }
 
+    public void addAdmin(String name, String username, String password) {
+        User user= new User (name,username,password,"admin", UserRoles.ADMIN);
+        userRepository.save (user);
+    }
+
+    public void addComment(String text, String userId, Long entryID){
+        Optional<User> user = userRepository.findById(userId);
+        Optional<Entry> entry = entryRepository.findById(entryID);
+        Comment comment = new Comment (text);
+        comment.setText(text);
+        comment.setUser(user.get());
+        comment.setEntry(entry.get());
+        commentRepository.save(comment);
+    }
+
+    public List<Comment> getCommentsByCreationDate(){
+        Sort sort = Sort.by(Sort.Direction.ASC, "date");
+        return commentRepository.findAll(sort);
+    }
+
+    public String findIdByUsername(String name) {
+        Optional<User> user = userRepository.findByUsername (name);
+        return user.get ().getId ();
+    }
+
+    public void adminRechte(String id){
+        Optional<User> user = userRepository.findById (id);
+        //User user =
+
+
+    }
 
 }

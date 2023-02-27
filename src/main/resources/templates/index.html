@@ -12,12 +12,51 @@
             <li><a th:href="@{/login}">Login</a></li>
             <li><a th:href="@{/registration}">Register Now</a></li>
             <li><a th:href="@{/entries}">Unsere Beiträge entdecken</a></li>
+            <li><a th:href="@{/dummies}">Dummies laden (Hardcoded! nur einmal klicken nach Serverstart</a></li>
         </ul>
     </nav>
 </header>
 
 <main>
-    <!-- Hier kommt der eigentliche Inhalt der Seite -->
+    <h1>Hier sind die Beiträge</h1>
+    <br>
+    <ul>
+        <li th:each="e : ${entries}">
+            <div>
+                <span>Date: </span><span th:text="${e.date}"></span>
+                <span>Name: </span> <span th:text="${e.user.name}"></span>
+            </div>
+            <div>
+                <span>Text: </span> <span th:text="${e.text}"></span>
+            </div>
+            <div>
+                <!-- th:if="${user == sessionUser}"-->
+                <form action="#" method="post" th:action="@{/}" th:object="${comment}">
+                    <input type="hidden" name="entryId" th:value="${e.id}">
+                    <p>Text<input type="text" th:field="*{text}"></p>
+                    <button type="submit">Kommentar abschicken</button>
+                </form>
+            </div>
+            <br>
+            <div>
+                <ul>
+
+                    <li th:each="c : ${comments}" th:if="${e.id==c.getEntry().getId()}">
+                        <div>
+                            <span>Name: </span><span th:text="${c.user.name}"></span>
+                            <br>
+                            <span>Date: </span><span th:text="${c.date}"></span>
+                            <br>
+                            <span>Comment: </span><span th:text="${c.text}"></span>
+                        </div>
+                        <br>
+
+                    </li>
+                </ul>
+            </div>
+
+        </li>
+    </ul>
 </main>
 
 <footer>
