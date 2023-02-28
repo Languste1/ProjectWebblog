@@ -30,9 +30,6 @@
           <a class="button is-transparent" th:href="@{/}">
             Home
           </a>
-          <a class="button is-transparent" th:href="@{/entries}">
-            Beiträge
-          </a>
           <a class="button is-transparent" th:href="@{/dummies}">
             Load Dummies
           </a>
@@ -63,7 +60,7 @@
 <form th:action="@{'/updateEntry/' + ${entry.id}}" method="post" th:object="${entry}">
   <p>Titel: <input type="text" th:field="*{title}" th:value="${title}" /></p>
   <p>Text: <input type="text" class="eingabe" th:field="*{text}" th:value="${text}" /></p>
-  <button type="submit">Eintrag aktualisieren</button>
+  <button class="button is-rounded is-small" type="submit">Eintrag aktualisieren</button>
 </form>
   </div>
 </body>
