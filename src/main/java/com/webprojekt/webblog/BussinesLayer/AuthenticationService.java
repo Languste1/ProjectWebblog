@@ -11,9 +11,13 @@ import com.webprojekt.webblog.DTO.RegisterRequest;
 import com.webprojekt.webblog.DAO.UserRoles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -33,8 +37,8 @@ public class AuthenticationService {
                 .name (request.getName ())
                 .userRoles (UserRoles.USER)
                 .build();
-        var savedUser = repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        User savedUser = repository.save(user);
+        String jwtToken = jwtService.generateToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -42,24 +46,29 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername (),
-                        request.getPassword()
-                )
-        );
-        var user = repository.findByUsername (request.getUsername ())
-                .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        try {
+            authenticationManager.authenticate (
+                    new UsernamePasswordAuthenticationToken (
+                            request.getUsername (),
+                            request.getPassword ()
+                    )
+            );
+        } catch (org.springframework.security.core.AuthenticationException e) {
+            throw new BadCredentialsException ("Invalid username or password", e);
+        }
+
+        User user = repository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException ("User not found"));
         revokeAllUserTokens(user);
+        String jwtToken = jwtService.generateToken(user);
         saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .token (jwtToken)
                 .build();
     }
 
     private void saveUserToken(User user, String jwtToken) {
-        var token = Token.builder()
+        Token token = Token.builder()
                 .user(user)
                 .token(jwtToken)
                 .tokenType(TokenType.BEARER)
@@ -70,7 +79,7 @@ public class AuthenticationService {
     }
 
     private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+        List<Token> validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())
             return;
         validUserTokens.forEach(token -> {
@@ -81,15 +90,15 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse registerAdmin(RegisterRequest request) {
-        var user = User.builder()
+        User user = User.builder()
                 .username (request.getUsername ())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .name (request.getName ())
                 .userRoles (UserRoles.ADMIN)
                 .build();
-        var savedUser = repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        User savedUser = repository.save(user);
+        String jwtToken = jwtService.generateToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)

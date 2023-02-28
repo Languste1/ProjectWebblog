@@ -1,7 +1,5 @@
 package com.webprojekt.webblog.Security;
 
-import com.webprojekt.webblog.DTO.AuthenticationResponse;
-import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -10,8 +8,10 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -19,18 +19,20 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAthFilter;
     private final AuthenticationProvider authenticationProvider;
-
+    private final LogoutHandler logoutHandler;
 
     @Autowired
-    public SecurityConfig(JwtAuthenticationFilter jwtAthFilter, AuthenticationProvider authenticationProvider) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAthFilter, AuthenticationProvider authenticationProvider, LogoutHandler logoutHandler) {
         this.jwtAthFilter = jwtAthFilter;
         this.authenticationProvider = authenticationProvider;
+        this.logoutHandler = logoutHandler;
     }
 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
+       ;
         http
                 .csrf() // disable CSRF protection
                 .disable()
@@ -46,32 +48,22 @@ public class SecurityConfig {
                 // allow access to admin-related pages for admins only
                 .requestMatchers ("/WebBlog/User/isModerator/isAdmin**").hasAnyRole("ADMIN")
                 // require authentication for all other requests
-                .anyRequest().authenticated()
+                .anyRequest()
+                .authenticated()
+                .and ()
+                .formLogin ()
+                .loginPage ("/login")
+                .successForwardUrl ("/")
                 .and()
-                // enable form-based login
-                .formLogin()
-                // specify the login page URLv
-                .loginPage("/login")
-                // redirect to homepage after successful login
-                .defaultSuccessUrl("/")
-                // set authentication success handler to create and set JWT token cookie
-                .and()
-                // enable logout
-                .logout()
-                // specify the logout URL
-                .logoutUrl("/logout")
-                // redirect to login page after successful logout
-                .logoutSuccessUrl("/login")
-                .and()
-                // configure session management to be stateless
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                // set authentication provider
                 .authenticationProvider(authenticationProvider)
-                // add JWT authentication filter before the username/password authentication filter
-                .addFilterBefore(jwtAthFilter, UsernamePasswordAuthenticationFilter.class);
-
+                .addFilterBefore(jwtAthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout()
+                .logoutUrl("/logout")
+                .addLogoutHandler(logoutHandler)
+                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
         return http.build();
     }
 /*
