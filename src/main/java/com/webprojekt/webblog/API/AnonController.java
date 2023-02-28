@@ -1,18 +1,19 @@
 package com.webprojekt.webblog.API;
 
 import com.webprojekt.webblog.BussinesLayer.AuthenticationService;
+import com.webprojekt.webblog.BussinesLayer.LogoutService;
 import com.webprojekt.webblog.BussinesLayer.WebBlogServices;
 import com.webprojekt.webblog.DAO.Comment;
 import com.webprojekt.webblog.DAO.Entry;
 import com.webprojekt.webblog.DTO.AuthenticationRequest;
 import com.webprojekt.webblog.DTO.AuthenticationResponse;
 import com.webprojekt.webblog.DTO.RegisterRequest;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,11 +23,12 @@ import org.springframework.web.bind.annotation.*;
 public class AnonController {
     private final WebBlogServices webBlogServices;
     private final AuthenticationService authenticationService;
-
+    private final LogoutService logoutService;
     @Autowired
-    public AnonController(WebBlogServices webBlogServices, AuthenticationService authenticationService) {
+    public AnonController(WebBlogServices webBlogServices, AuthenticationService authenticationService, LogoutService logoutService) {
         this.webBlogServices = webBlogServices;
         this.authenticationService = authenticationService;
+        this.logoutService = logoutService;
     }
 
     @GetMapping("/index")
@@ -141,6 +143,15 @@ public class AnonController {
         return "redirect:/index";
     }
 
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            logoutService.logout(request, response, auth);
+        }
+        return "redirect:/index";
+    }
 
 
 }

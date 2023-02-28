@@ -40,9 +40,9 @@ public class SecurityConfig {
                 // allow access to static resources (CSS, JS, etc.) at common locations
                 .requestMatchers(PathRequest.toStaticResources ().atCommonLocations ()).permitAll()
                 // allow access to certain pages without authentication
-                .requestMatchers ("/**","/index**","/registration**","/login**","/resources**","/css/**").permitAll()
+                .requestMatchers ("/index**","/registration**","/login**","/resources**","/css/**").permitAll()
                 // allow access to user-related pages for users, moderators, and admins
-                .requestMatchers ("/dummies**").hasAnyRole(
+                .requestMatchers ("/dummies**","/logout").hasAnyRole(
                         UserRoles.USER.name (),
                         UserRoles.MODERATOR.name (),
                         UserRoles.ADMIN.name ()
@@ -57,6 +57,8 @@ public class SecurityConfig {
                 // require authentication for all other requests
                 .anyRequest()
                 .authenticated()
+                .and ()
+                .exceptionHandling ().accessDeniedHandler (h)
                 .and ()
                 .formLogin ()
                 .loginPage ("/login")
