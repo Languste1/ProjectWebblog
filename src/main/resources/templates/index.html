@@ -30,9 +30,6 @@
                     <a class="button is-transparent" th:href="@{/}">
                         Home
                     </a>
-                    <a class="button is-transparent" th:href="@{/entries}">
-                        Beiträge
-                    </a>
                     <a class="button is-transparent" th:href="@{/dummies}">
                         Load Dummies
                     </a>
@@ -69,15 +66,34 @@
     </nav>
 </header>
 -->
-<main class="has-text-centered">
+
+
+<!--
     <div class="banner">
         <img src="/banner.png" alt="">
     </div>
     <br>
     <h1>Willkommem auf unserem Blog</h1>
     <br>
+-->
+<main class="has-text-centered">
 
-<main>
+    <div class="container1 margintop">
+        <div class="container2">
+            <div >
+            <h1>Willkommen bei TBTCinema</h1>
+            <p>Schreibe einen Beitrag</p>
+                <form action="#" method="post" th:action="@{/}" th:object="${entry}">
+                    <input type="hidden" name="entryType" value="entry">
+                    <p>Title<input type="text" name="title" th:field="*{title}"></p>
+                    <p>Text<input type="text" name="text" th:field="*{text}"></p>
+                    <button type="submit">Neuen Beitrag erstellen</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <!--
     <div class="container1">
         <form action="#" method="post" th:action="@{/}" th:object="${entry}">
             <input type="hidden" name="entryType" value="entry">
@@ -87,16 +103,17 @@
         </form>
 
     </div>
-
+-->
     <br>
     <ul>
         <li th:each="e : ${entries}">
             <div class="container1">
 
+                <div class="container2">
+
                 <div class="image-container">
                     <img src="/img_1.png" alt="Your image description">
                 </div>
-                <div class="container2">
             <div>
 
                 <span>Date: </span><span th:text="${e.date}"></span>
