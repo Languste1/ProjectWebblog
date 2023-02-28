@@ -8,6 +8,7 @@ import com.webprojekt.webblog.Repositories.EntryRepository;
 /*import com.webprojekt.webblog.Repositories.SessionRepository;*/
 import com.webprojekt.webblog.Repositories.UserRepository;
 import com.webprojekt.webblog.DAO.UserRoles;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -111,4 +112,39 @@ public class WebBlogServices  {
     public List<User> getAllUsers() {
         return userRepository.findAll ();
     }
+
+    public void deleteComment(Long commentId){
+        commentRepository.deleteById(commentId);
+    }
+    @Transactional
+    public void deleteEntry(Long id) {
+        Entry entry = entryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid entry id"));
+        commentRepository.deleteAllByEntry(entry);
+        entryRepository.delete(entry);
+    }
+    public void updateEntry(Long id, String title, String text) {
+        Optional<Entry> optionalEntry = entryRepository.findById(id);
+        if (optionalEntry.isPresent()) {
+            Entry entry = optionalEntry.get();
+            entry.setTitle(title);
+            entry.setText(text);
+            entryRepository.save(entry);
+        }
+    }
+
+    public Entry getEntryById(Long id) {
+        Optional<Entry> optionalEntry = entryRepository.findById(id);
+        return optionalEntry.orElse(null);
+    }
+
+    public void editEntry(Long id, String title, String text) {
+        Optional<Entry> entry = entryRepository.findById(id);
+        if (entry.isPresent()) {
+            Entry editedEntry = entry.get();
+            editedEntry.setTitle(title);
+            editedEntry.setText(text);
+            entryRepository.save(editedEntry);
+        }
+    }
+
 }

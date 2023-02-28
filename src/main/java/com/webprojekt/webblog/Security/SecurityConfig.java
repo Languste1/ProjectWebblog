@@ -38,7 +38,7 @@ public class SecurityConfig {
                 // allow access to static resources (CSS, JS, etc.) at common locations
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 // allow access to certain pages without authentication
-                .requestMatchers ("/**","/registration**","/login**","/entries","/dummies**").permitAll()
+                .requestMatchers ("/**","/registration**","/login**","/entries","/dummies**", "delete**").permitAll()
                 // allow access to user-related pages for users, moderators, and admins
                 .requestMatchers ("/WebBlog/User**").hasAnyRole("USER","ADMIN","MODERATOR")
                 // allow access to moderator-related pages for moderators and admins

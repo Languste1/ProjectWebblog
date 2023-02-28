@@ -51,6 +51,36 @@ public class AnonController {
         model.addAttribute("comment", new Comment());
         return "redirect:/";
     }
+    @PostMapping("/deletecomment/{id}")
+    public String deleteComment(@PathVariable("id") Long id, @RequestParam(value = "deleteComment", required = false) String deleteComment) {
+        if (deleteComment != null) {
+            webBlogServices.deleteComment(id);
+        }
+        return "redirect:/";
+    }
+    @PostMapping("/deleteEntry/{entryId}")
+    public String deleteEntry(@PathVariable("entryId") Long entryId) {
+        webBlogServices.deleteEntry(entryId);
+        return "redirect:/";
+    }
+    @GetMapping("/editEntry/{id}")
+    public String editEntry(@PathVariable Long id, Model model) {
+        Entry entry = webBlogServices.getEntryById(id);
+        model.addAttribute("entry", entry);
+        model.addAttribute("title", entry.getTitle());
+        model.addAttribute("text", entry.getText());
+        return "editentry";
+    }
+    @PostMapping("/updateEntry/{id}")
+    public String updateEntry(@PathVariable Long id, @ModelAttribute Entry entry) {
+        webBlogServices.updateEntry(id, entry.getTitle(), entry.getText());
+        return "redirect:/";
+    }
+
+
+
+
+
 /*
     @PostMapping("/")
     public String addComment(@ModelAttribute Comment comment, Model model, HttpServletRequest request) {
