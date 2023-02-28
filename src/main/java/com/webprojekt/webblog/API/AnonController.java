@@ -3,10 +3,9 @@ package com.webprojekt.webblog.API;
 import com.webprojekt.webblog.BussinesLayer.AuthenticationService;
 import com.webprojekt.webblog.BussinesLayer.WebBlogServices;
 import com.webprojekt.webblog.DAO.Comment;
-import com.webprojekt.webblog.DAO.User;
-import com.webprojekt.webblog.Security.AuthenticationRequest;
-import com.webprojekt.webblog.Security.AuthenticationResponse;
-import com.webprojekt.webblog.Security.RegisterRequest;
+import com.webprojekt.webblog.DTO.AuthenticationRequest;
+import com.webprojekt.webblog.DTO.AuthenticationResponse;
+import com.webprojekt.webblog.DTO.RegisterRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -111,16 +110,7 @@ public class AnonController {
         }
     }
 
-/*
-    @PostMapping("/login")
-    public String loginUser(Model model, @ModelAttribute("authenticationRequest") AuthenticationRequest authenticationRequest) {
 
-        AuthenticationResponse response = authenticationService.authenticate(authenticationRequest);
-        model.addAttribute("authenticationResponse", response);
-
-        return "/"; // Hier geben wir den Namen der HTML-View zurück, die das Ergebnis darstellt
-    }
-*/
 
     @GetMapping("/entries")
     public  String getEntries(){
@@ -131,10 +121,9 @@ public class AnonController {
     @GetMapping("/dummies")
     public String getDummies(){
         authenticationService.registerAdmin (new RegisterRequest ("admin","admin","admin1234","admin@admin.com"));
-    //    authenticationService.register (new RegisterRequest ("Dummy","Dummy Dummyson2","dummy1234","dummy@dummy.com"));
-    //    authenticationService.register (new RegisterRequest ("Dummy2","Dummy Dummyson3","dummy1234","dummy@dummy.com"));
-    //    authenticationService.register (new RegisterRequest ("Dummy3","Dummy Dummyson4","dummy1234","dummy@dummy.com"));
-    //    authenticationService.register (new RegisterRequest ("Dummy4","Dummy Dummyson5","dummy1234","dummy@dummy.com"));
+        webBlogServices.addUser ("Dummy Dummyson2","dummy","dummy1234","dummy@dummy.com");
+        webBlogServices.addUser ("Dummy Dummyson3","dummy2","dummy1234","dummy@dummy.com");
+
     //dummy
 
 
@@ -159,7 +148,7 @@ public class AnonController {
         return "users";
     }
 
-    @PutMapping("/users/{id}/downgrade")
+    @PostMapping ("/users/{id}/downgrade")
     public String downgradeUser(@PathVariable("id") String id, Model model) {
         webBlogServices.downgrade(id);
         model.addAttribute("users", webBlogServices.getAllUsers ());

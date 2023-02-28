@@ -1,7 +1,10 @@
 package com.webprojekt.webblog.DAO;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,6 +12,9 @@ import java.util.List;
 @Data
 @Entity(name = "entry")
 @Table
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Entry {
 
     @Id
@@ -47,9 +53,6 @@ public class Entry {
     public Entry( String text) {
         this.date= LocalDateTime.now ();
         this.text = text;
-    }
-
-    public Entry() {
     }
 
 

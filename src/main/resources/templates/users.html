@@ -25,7 +25,7 @@
             <form th:action="@{/users/{id}/upgrade(id=${user.id})}" method="post">
                 <input type="submit" value="Upgrade">
             </form>
-            <form th:action="@{/users/{id}/downgrade(id=${user.id})}" method="put">
+            <form th:action="@{/users/{id}/downgrade(id=${user.id})}" method="post">
                 <input type="submit" value="Downgrade">
             </form>
         </td>

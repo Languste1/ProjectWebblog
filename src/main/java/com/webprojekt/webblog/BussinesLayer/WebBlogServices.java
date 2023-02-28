@@ -54,8 +54,10 @@ public class WebBlogServices  {
         return userRepository.findAll();
     }
 
-    public void addUser(String name, String username, String password) {
+    public void addUser(String name, String username, String password, String email) {
         User user= new User (name,username,password);
+        user.setEmail (email);
+        user.setUserRoles (UserRoles.USER);
         userRepository.save (user);
     }
 
@@ -106,8 +108,8 @@ public class WebBlogServices  {
         }
     }
 
-    public List<User> getAllUsers(){
+
+    public List<User> getAllUsers() {
         return userRepository.findAll ();
     }
-
 }
