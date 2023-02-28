@@ -137,7 +137,7 @@ public class AnonController {
 
     @GetMapping("/dummies")
     public String getDummies(){
-        authenticationService.registerAdmin (new RegisterRequest ("admin","admin","admin1234","admin@admin.com"));
+      //  authenticationService.registerAdmin (new RegisterRequest ("admin","admin","admin1234","admin@admin.com"));
         webBlogServices.addUser ("Dummy Dummyson2","dummy","dummy1234","dummy@dummy.com");
         webBlogServices.addUser ("Dummy Dummyson3","dummy2","dummy1234","dummy@dummy.com");
 
