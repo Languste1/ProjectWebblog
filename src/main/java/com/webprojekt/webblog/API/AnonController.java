@@ -127,10 +127,10 @@ public class AnonController {
     //dummy
 
 
-        webBlogServices.addEntry("Hier ist ein Text1", webBlogServices.findIdByUsername("admin"));
-        webBlogServices.addEntry("Hier ist ein Text2", webBlogServices.findIdByUsername("admin"));
-        webBlogServices.addEntry("Hier ist ein Text3", webBlogServices.findIdByUsername("admin"));
-        webBlogServices.addEntry("Hier ist ein Text4", webBlogServices.findIdByUsername("admin"));
+        webBlogServices.addEntry("Placeholder","Hier ist ein Text1", webBlogServices.findIdByUsername("admin"));
+        webBlogServices.addEntry("Placeholder4","Hier ist ein Text2", webBlogServices.findIdByUsername("admin"));
+        webBlogServices.addEntry("Placeholder2","Hier ist ein Text3", webBlogServices.findIdByUsername("admin"));
+        webBlogServices.addEntry("Placeholder3","Hier ist ein Text4", webBlogServices.findIdByUsername("admin"));
         return "redirect:/";
     }
 

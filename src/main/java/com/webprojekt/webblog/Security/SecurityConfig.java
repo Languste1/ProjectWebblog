@@ -34,7 +34,7 @@ public class SecurityConfig {
         http
                 .csrf() // disable CSRF protection
                 .disable()
-                .authorizeRequests()
+                .authorizeHttpRequests ()
                 // allow access to static resources (CSS, JS, etc.) at common locations
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 // allow access to certain pages without authentication
@@ -55,13 +55,6 @@ public class SecurityConfig {
                 // redirect to homepage after successful login
                 .defaultSuccessUrl("/")
                 // set authentication success handler to create and set JWT token cookie
-                .successHandler((request, response, authentication) -> {
-                    String token = ((AuthenticationResponse) authentication.getPrincipal()).getToken();
-                    Cookie cookie = new Cookie("jwtToken", token);
-                    cookie.setPath("/");
-                    cookie.setMaxAge(60 * 60 * 24); // set cookie expiration to 1 day
-                    response.addCookie(cookie);
-                })
                 .and()
                 // enable logout
                 .logout()

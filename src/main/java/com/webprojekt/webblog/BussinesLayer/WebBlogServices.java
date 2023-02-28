@@ -7,7 +7,7 @@ import com.webprojekt.webblog.DAO.User;
 import com.webprojekt.webblog.Repositories.EntryRepository;
 /*import com.webprojekt.webblog.Repositories.SessionRepository;*/
 import com.webprojekt.webblog.Repositories.UserRepository;
-import com.webprojekt.webblog.Security.UserRoles;
+import com.webprojekt.webblog.DAO.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -29,8 +29,6 @@ public class WebBlogServices  {
     }
 
 
-
-
     // Wird eine Liste von Entries nach Datum sortiert
     public List<Entry> getEntriesByCreationDate() {
         Sort sort = Sort.by(Sort.Direction.DESC, "date"); // Sort wird benutz, um Listen von Objekten in DatenBanken zu sortieren
@@ -42,11 +40,12 @@ public class WebBlogServices  {
     }
 
     // Methode, um eine Entry zu addieren
-    public void addEntry(String text, String customerId) {
+    public void addEntry(String title, String text, String customerId) {
         Optional<User> user = userRepository.findById(customerId);
         Entry entry = new Entry(text);
         entry.setText(text);
         entry.setUser(user.get());
+        entry.setTitle (title);
         entryRepository.save(entry);
     }
 

@@ -1,6 +1,5 @@
 package com.webprojekt.webblog.DAO;
 
-import com.webprojekt.webblog.Security.UserRoles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

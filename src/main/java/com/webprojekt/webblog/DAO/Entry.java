@@ -1,5 +1,6 @@
 package com.webprojekt.webblog.DAO;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +32,11 @@ public class Entry {
             nullable = false
     )
     private long id;
-
+    @Nullable
+    @Column(
+            name = "title"
+    )
+    private String title;
     @Column(
             name = "entry_date",
             nullable = false,
@@ -41,12 +46,16 @@ public class Entry {
 
     @Column(
             name = "text",
-            nullable = false
+            nullable = false,
+            columnDefinition = "TEXT"
     )
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "idUser", nullable = false)
+    @JoinColumn(
+            name = "idUser",
+            nullable = false
+    )
     private User user;
     
 

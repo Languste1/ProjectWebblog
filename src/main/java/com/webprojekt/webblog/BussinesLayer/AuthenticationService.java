@@ -5,7 +5,7 @@ import com.webprojekt.webblog.Repositories.UserRepository;
 import com.webprojekt.webblog.DTO.AuthenticationRequest;
 import com.webprojekt.webblog.DTO.AuthenticationResponse;
 import com.webprojekt.webblog.DTO.RegisterRequest;
-import com.webprojekt.webblog.Security.UserRoles;
+import com.webprojekt.webblog.DAO.UserRoles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.AuthenticationManager;
