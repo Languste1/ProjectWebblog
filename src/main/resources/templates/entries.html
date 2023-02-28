@@ -3,48 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <title>Titel</title>
-    <link rel="stylesheet" href="path/to/bulma.css">
-    <script src="path/to/bulma.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" th:href="@{/newSheet.css}">
+
 </head>
 <body>
+
+<nav class="navbar has-background-primary-dark" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            <img src="@{/static/img.png}" width="auto">
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu is-transparent">
+        <div class="navbar-start">
+            <div class="navbar-item">
+            <a class="button" th:href="@{/}">
+                Home
+            </a>
+
+            </div>
+        </div>
+
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+                    <a class="button is-primary" th:href="@{/registration}">
+                        <strong>Sign up</strong>
+                    </a>
+                    <a class="button is-light" th:href="@{/login}">
+                        Log in
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
 <h1>Hier sind die Beiträge</h1>
 <br>
-<ul>
+
+<h1 class="has-text-centered">Willkommen auf unserem Blog</h1>
+<br>
+<ul >
     <li th:each="e : ${entries}">
-        <div>
-            <span>Date: </span><span th:text="${e.date}"></span>
-            <span>Name: </span> <span th:text="${e.user.name}"></span>
-        </div>
-        <div>
-            <span>Text: </span> <span th:text="${e.text}"></span>
-        </div>
-        <div>
-        <!-- th:if="${user == sessionUser}"-->
-            <form action="#" method="post" th:action="@{/Entry}" th:object="${comment}">
-                <p>Text<input type="text" th:field="*{text}"></p>
+        <div class="container1">
+            <div class="container2">
 
-                <button type="submit">Kommentar abschicken</button>
-            </form>
-        </div>
-        <br>
-        <div>
-            <ul>
 
-                <li th:each="c : ${comments}" th:if="${e.id==c.getEntry().getId()}">
-                    <div>
-                        <span>Name: </span><span th:text="${c.user.name}"></span>
-                        <br>
-                        <span>Date: </span><span th:text="${c.date}"></span>
-                        <br>
-                        <span>Comment: </span><span th:text="${c.text}"></span>
-                    </div>
-                        <br>
+                <div >
+                    <span>Date: </span><span th:text="${e.date}"></span>
+                    <span>Name: </span> <span th:text="${e.user.name}"></span>
+                </div>
 
-                </li>
-            </ul>
+                <div class="container4">
+                    <span>Text: </span> <span th:text="${e.text}"></span>
+                </div>
+                <div >
+                    <ul>
+
+                        <li th:each="c : ${comments}" th:if="${e.id==c.getEntry().getId()}">
+
+                            <div class="container5">
+                                <div>
+                                    <span>Name: </span><span th:text="${c.user.name}"></span>
+                                    <br>
+                                    <span>Date: </span><span th:text="${c.date}"></span>
+                                </div>
+                                <div>
+                                    <br>
+                                    <span>Comment: </span><span th:text="${c.text}"></span>
+                                </div>
+
+
+                            </div>
+                            <br>
+
+                        </li>
+                    </ul>
+                </div>
+
+
+                <div class="container4">
+                    <!-- th:if="${user == sessionUser}"-->
+                    <form action="#" method="post" th:action="@{/Entry}" th:object="${comment}">
+                        <input type="hidden" name="entryId" th:value="${e.id}">
+                        <p>Text<input type="text" th:field="*{text}"></p>
+                        <button type="submit">Kommentar abschicken</button>
+                    </form>
+                </div>
+                <br>
+
+
+            </div>
+
         </div>
 
     </li>
 </ul>
+
 </body>
 </html>
