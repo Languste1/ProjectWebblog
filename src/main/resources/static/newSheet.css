@@ -62,9 +62,18 @@
 
 
 .container3{
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(10, 1fr);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 15px 5px;
+    border-radius: 10px;
+    border-style: none;
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    width: 70%;
+    margin-bottom: 10px;
 
 }
 
