@@ -2,13 +2,12 @@ package com.webprojekt.webblog.BussinesLayer;
 
 import com.webprojekt.webblog.DAO.User;
 import com.webprojekt.webblog.Repositories.UserRepository;
-import com.webprojekt.webblog.Security.AuthenticationRequest;
-import com.webprojekt.webblog.Security.AuthenticationResponse;
-import com.webprojekt.webblog.Security.RegisterRequest;
-import com.webprojekt.webblog.Security.UserRoles;
+import com.webprojekt.webblog.DTO.AuthenticationRequest;
+import com.webprojekt.webblog.DTO.AuthenticationResponse;
+import com.webprojekt.webblog.DTO.RegisterRequest;
+import com.webprojekt.webblog.DAO.UserRoles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

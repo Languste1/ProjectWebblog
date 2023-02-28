@@ -1,7 +1,11 @@
 package com.webprojekt.webblog.DAO;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,6 +13,9 @@ import java.util.List;
 @Data
 @Entity(name = "entry")
 @Table
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Entry {
 
     @Id
@@ -25,7 +32,11 @@ public class Entry {
             nullable = false
     )
     private long id;
-
+    @Nullable
+    @Column(
+            name = "title"
+    )
+    private String title;
     @Column(
             name = "entry_date",
             nullable = false,
@@ -35,23 +46,22 @@ public class Entry {
 
     @Column(
             name = "text",
-            nullable = false
+            nullable = false,
+            columnDefinition = "TEXT"
     )
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "idUser", nullable = false)
+    @JoinColumn(
+            name = "idUser",
+            nullable = false
+    )
     private User user;
-
-    @OneToMany(mappedBy = "entry")
-    private List<Comment> comment;
+    
 
     public Entry( String text) {
         this.date= LocalDateTime.now ();
         this.text = text;
-    }
-
-    public Entry() {
     }
 
 

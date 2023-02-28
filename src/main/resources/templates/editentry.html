@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Registration Form</title>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Entry</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" th:href="@{/newSheet.css}">
 </head>
@@ -59,26 +58,13 @@
   </div>
 </nav>
 <div>
-<h1>Sign up</h1>
-<h2>Registration Form</h2>
-<form action="#" th:action="@{/registration}" th:object="${user}" method="post">
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" th:field="*{name}" />
-
-  <label for="username">Username:</label>
-  <input type="text" id="username" name="username" th:field="*{username}" />
-
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" th:field="*{email}" />
-
-  <label for="password">Password:</label>
-  <input type="password" id="password" name="password" th:field="*{password}" />
-
-  <button type="submit">Register</button>
+  <div class="container">
+<h2>Edit Entry</h2>
+<form th:action="@{'/updateEntry/' + ${entry.id}}" method="post" th:object="${entry}">
+  <p>Titel: <input type="text" th:field="*{title}" th:value="${title}" /></p>
+  <p>Text: <input type="text" class="eingabe" th:field="*{text}" th:value="${text}" /></p>
+  <button type="submit">Eintrag aktualisieren</button>
 </form>
-
-<p th:text="${message}" style="color:green"></p>
-<p th:text="${error}" style="color:red"></p>
+  </div>
 </body>
 </html>
-
