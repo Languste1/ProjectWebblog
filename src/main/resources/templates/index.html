@@ -54,7 +54,16 @@
 </nav>
 
 <main>
-    <h1>Hier sind die Beiträge</h1>
+    <div class="container1">
+        <form action="#" method="post" th:action="@{/}" th:object="${entry}">
+            <input type="hidden" name="entryType" value="entry">
+            <p>Title<input type="text" name="title" th:field="*{title}"></p>
+            <p>Text<input type="text" name="text" th:field="*{text}"></p>
+            <button type="submit">Neuen Beitrag erstellen</button>
+        </form>
+
+    </div>
+
     <br>
     <ul>
         <li th:each="e : ${entries}">

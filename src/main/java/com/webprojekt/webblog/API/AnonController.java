@@ -3,6 +3,7 @@ package com.webprojekt.webblog.API;
 import com.webprojekt.webblog.BussinesLayer.AuthenticationService;
 import com.webprojekt.webblog.BussinesLayer.WebBlogServices;
 import com.webprojekt.webblog.DAO.Comment;
+import com.webprojekt.webblog.DAO.Entry;
 import com.webprojekt.webblog.DTO.AuthenticationRequest;
 import com.webprojekt.webblog.DTO.AuthenticationResponse;
 import com.webprojekt.webblog.DTO.RegisterRequest;
@@ -29,15 +30,28 @@ public class AnonController {
 
     @GetMapping("/")
     public String index(Model model){
-      //  webBlogServices.addAdmin (new User ("admin",""));
+        //  webBlogServices.addAdmin (new User ("admin",""));
 
         model.addAttribute("entries", webBlogServices.getEntriesByCreationDate());
         model.addAttribute("comments", webBlogServices.getCommentsByCreationDate());
         model.addAttribute("comment", new Comment());
+        model.addAttribute ("entry", new Entry());
 
         return "index";
     }
-
+    @PostMapping("/")
+    public String addEntryOrComment(@ModelAttribute Entry entry, @ModelAttribute Comment comment, Model model, HttpServletRequest request) {
+        if (entry.getTitle() != null) {
+            this.webBlogServices.addEntry(entry.getTitle (), entry.getText(), webBlogServices.findIdByUsername("Admin"));
+        } else if (comment.getText() != null) {
+            Long entryId = Long.parseLong(request.getParameter("entryId"));
+            this.webBlogServices.addComment(comment.getText(), webBlogServices.findIdByUsername("admin"), entryId);
+        }
+        model.addAttribute("entry", new Entry());
+        model.addAttribute("comment", new Comment());
+        return "redirect:/";
+    }
+/*
     @PostMapping("/")
     public String addComment(@ModelAttribute Comment comment, Model model, HttpServletRequest request) {
 
@@ -50,6 +64,9 @@ public class AnonController {
 
         return "redirect:/";
     }
+
+ */
+
 
     @GetMapping("/registration")
     public String userRegistration(
