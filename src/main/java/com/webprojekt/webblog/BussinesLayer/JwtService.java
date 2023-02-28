@@ -1,6 +1,7 @@
 package com.webprojekt.webblog.BussinesLayer;
 
 
+import com.webprojekt.webblog.DAO.User;
 import com.webprojekt.webblog.Repositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,10 +13,7 @@ import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Jwts;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -61,6 +59,12 @@ public class JwtService {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
+
+    public Optional<User> extractUserId(String token) {
+        String username = extractUsername(token);
+        return userRepository.findIdByUsername(username);
+    }
+
 
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());

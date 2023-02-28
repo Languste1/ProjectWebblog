@@ -36,7 +36,7 @@ public class SecurityConfig {
         http
                 .csrf() // disable CSRF protection
                 .disable()
-                .authorizeRequests ()
+                .authorizeHttpRequests ()
                 // allow access to static resources (CSS, JS, etc.) at common locations
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 // allow access to certain pages without authentication
