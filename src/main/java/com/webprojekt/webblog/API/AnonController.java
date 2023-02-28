@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/")
 @Controller
 public class AnonController {
     private final WebBlogServices webBlogServices;
@@ -30,7 +29,7 @@ public class AnonController {
         this.authenticationService = authenticationService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/index")
     public String index(Model model){
         //  webBlogServices.addAdmin (new User ("admin",""));
 
@@ -41,33 +40,6 @@ public class AnonController {
 
         return "index";
     }
-    @PostMapping("/")
-    public String addEntryOrComment(@ModelAttribute Entry entry, @ModelAttribute Comment comment, Model model, HttpServletRequest request) {
-        if (entry.getTitle() != null) {
-            this.webBlogServices.addEntry(entry.getTitle (), entry.getText(), webBlogServices.findIdByUsername("Admin"));
-        } else if (comment.getText() != null) {
-            Long entryId = Long.parseLong(request.getParameter("entryId"));
-            this.webBlogServices.addComment(comment.getText(), webBlogServices.findIdByUsername("admin"), entryId);
-        }
-        model.addAttribute("entry", new Entry());
-        model.addAttribute("comment", new Comment());
-        return "redirect:/";
-    }
-/*
-    @PostMapping("/")
-    public String addComment(@ModelAttribute Comment comment, Model model, HttpServletRequest request) {
-
-        Long entryId = Long.parseLong(request.getParameter("entryId"));
-
-        this.webBlogServices.addComment(comment.getText(), webBlogServices.findIdByUsername("admin"), entryId );
-        model.addAttribute("comment", new Comment());
-
-
-
-        return "redirect:/";
-    }
-
- */
 
 
     @GetMapping("/registration")
@@ -92,8 +64,7 @@ public class AnonController {
     public String registerUser(@ModelAttribute("user") RegisterRequest request, Model model) {
         try {
             authenticationService.register(request);
-            //model.addAttribute("message", "User registered successfully!");
-            return "redirect:/";
+            return "redirect:/login";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "registration";
@@ -112,7 +83,7 @@ public class AnonController {
         try {
             AuthenticationResponse authenticationResponse = authenticationService.authenticate(request);
             model.addAttribute("token", authenticationResponse.getToken());
-            return "redirect:/"; // or any other URL you want to redirect to after login
+            return "redirect:/index"; // or any other URL you want to redirect to after login
         } catch (UsernameNotFoundException | BadCredentialsException e) {
             model.addAttribute("errorMessage", "Invalid username or password");
             return "login";
@@ -120,35 +91,21 @@ public class AnonController {
     }
 
 
-
-    @GetMapping("/entries")
-    public  String getEntries(){
-
-        return "entries";
-    }
-
     @GetMapping("/dummies")
     public String getDummies(){
         authenticationService.registerAdmin (new RegisterRequest ("admin","admin","admin1234","admin@admin.com"));
         webBlogServices.addUser ("Dummy Dummyson2","dummy","dummy1234","dummy@dummy.com");
         webBlogServices.addUser ("Dummy Dummyson3","dummy2","dummy1234","dummy@dummy.com");
 
-    //dummy
 
 
         webBlogServices.addEntry("Placeholder","Hier ist ein Text1", webBlogServices.findIdByUsername("admin"));
         webBlogServices.addEntry("Placeholder4","Hier ist ein Text2", webBlogServices.findIdByUsername("admin"));
         webBlogServices.addEntry("Placeholder2","Hier ist ein Text3", webBlogServices.findIdByUsername("admin"));
         webBlogServices.addEntry("Placeholder3","Hier ist ein Text4", webBlogServices.findIdByUsername("admin"));
-        return "redirect:/";
+        return "redirect:/index";
     }
 
-    @GetMapping("/users")
-    public String getAllUsers(Model model) {
-
-        model.addAttribute("users", webBlogServices.getAllUsers ());
-        return "users";
-    }
 
     @PostMapping("/users/{id}/upgrade")
     public String upgradeUser(@PathVariable("id") String id, Model model) {
@@ -163,6 +120,29 @@ public class AnonController {
         model.addAttribute("users", webBlogServices.getAllUsers ());
         return "users";
     }
+
+    @GetMapping("/users")
+    public String getAllUsers(Model model) {
+
+        model.addAttribute("users", webBlogServices.getAllUsers ());
+        return "users";
+    }
+
+    @PostMapping("/index")
+    public String addEntryOrComment(@ModelAttribute Entry entry, @ModelAttribute Comment comment, Model model, HttpServletRequest request) {
+        if (entry.getTitle() != null) {
+            this.webBlogServices.addEntry(entry.getTitle (), entry.getText(), webBlogServices.findIdByUsername("Admin"));
+        } else if (comment.getText() != null) {
+            Long entryId = Long.parseLong(request.getParameter("entryId"));
+            this.webBlogServices.addComment(comment.getText(), webBlogServices.findIdByUsername("admin"), entryId);
+        }
+        model.addAttribute("entry", new Entry());
+        model.addAttribute("comment", new Comment());
+        return "redirect:/index";
+    }
+
+
+
 }
 
 

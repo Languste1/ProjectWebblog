@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Titel</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" th:href="@{/newSheet.css}">
+    <link rel="stylesheet" th:href="@{/css/newSheet.css}">
 </head>
 <body>
 <header>
@@ -55,7 +55,7 @@
 
 <main>
     <div class="container1">
-        <form action="#" method="post" th:action="@{/}" th:object="${entry}">
+        <form action="#" method="post" th:action="@{/index}" th:object="${entry}">
             <input type="hidden" name="entryType" value="entry">
             <p>Title<input type="text" name="title" th:field="*{title}"></p>
             <p>Text<input type="text" name="text" th:field="*{text}"></p>
@@ -78,7 +78,7 @@
             </div>
             <div>
                 <!-- th:if="${user == sessionUser}"-->
-                <form action="#" method="post" th:action="@{/}" th:object="${comment}">
+                <form action="#" method="post" th:action="@{/index}" th:object="${comment}">
                     <input type="hidden" name="entryId" th:value="${e.id}">
                     <p>Text<input type="text" th:field="*{text}"></p>
                     <button type="submit">Kommentar abschicken</button>
