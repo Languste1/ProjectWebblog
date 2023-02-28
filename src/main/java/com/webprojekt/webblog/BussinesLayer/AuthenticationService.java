@@ -10,10 +10,8 @@ import com.webprojekt.webblog.DTO.AuthenticationResponse;
 import com.webprojekt.webblog.DTO.RegisterRequest;
 import com.webprojekt.webblog.DAO.UserRoles;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +48,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = repository.findByEmail(request.getUsername ())
+        var user = repository.findByUsername (request.getUsername ())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
@@ -80,5 +78,21 @@ public class AuthenticationService {
             token.setRevoked(true);
         });
         tokenRepository.saveAll(validUserTokens);
+    }
+
+    public AuthenticationResponse registerAdmin(RegisterRequest request) {
+        var user = User.builder()
+                .username (request.getUsername ())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .name (request.getName ())
+                .userRoles (UserRoles.ADMIN)
+                .build();
+        var savedUser = repository.save(user);
+        var jwtToken = jwtService.generateToken(user);
+        saveUserToken(savedUser, jwtToken);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 }

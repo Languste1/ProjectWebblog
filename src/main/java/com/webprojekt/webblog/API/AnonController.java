@@ -11,7 +11,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -90,7 +92,7 @@ public class AnonController {
     public String registerUser(@ModelAttribute("user") RegisterRequest request, Model model) {
         try {
             authenticationService.register(request);
-            model.addAttribute("message", "User registered successfully!");
+            //model.addAttribute("message", "User registered successfully!");
             return "redirect:/";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
@@ -100,29 +102,19 @@ public class AnonController {
     }
 
     @GetMapping("/login")
-    public String login(@ModelAttribute AuthenticationRequest request, Model model){
-        model.addAttribute ("login",new AuthenticationRequest ());
-        return "/login";
+    public String showLoginPage(Model model) {
+        model.addAttribute("login", new AuthenticationRequest());
+        return "login";
     }
 
     @PostMapping("/login")
-    public String loginPost(
-            @ModelAttribute AuthenticationRequest request,
-            Model model,
-            HttpServletRequest httpRequest,
-            HttpServletResponse httpResponse
-    ) {
+    public String login(@ModelAttribute AuthenticationRequest request, Model model) {
         try {
             AuthenticationResponse authenticationResponse = authenticationService.authenticate(request);
-            String token = authenticationResponse.getToken();
-            Cookie cookie = new Cookie("jwtToken", token);
-            cookie.setMaxAge(60 * 60 * 24); // set cookie expiration to 1 day
-            cookie.setPath("/");
-            httpResponse.addCookie(cookie);
-            return "redirect:/"; // redirect to home page after successful authentication
-        } catch (AuthenticationException e) {
-            model.addAttribute("error", "Invalid username or password");
-            model.addAttribute("login", new AuthenticationRequest()); // add the login object to the model to prepopulate the form
+            model.addAttribute("token", authenticationResponse.getToken());
+            return "redirect:/"; // or any other URL you want to redirect to after login
+        } catch (UsernameNotFoundException | BadCredentialsException e) {
+            model.addAttribute("errorMessage", "Invalid username or password");
             return "login";
         }
     }
@@ -137,7 +129,7 @@ public class AnonController {
 
     @GetMapping("/dummies")
     public String getDummies(){
-      //  authenticationService.registerAdmin (new RegisterRequest ("admin","admin","admin1234","admin@admin.com"));
+        authenticationService.registerAdmin (new RegisterRequest ("admin","admin","admin1234","admin@admin.com"));
         webBlogServices.addUser ("Dummy Dummyson2","dummy","dummy1234","dummy@dummy.com");
         webBlogServices.addUser ("Dummy Dummyson3","dummy2","dummy1234","dummy@dummy.com");
 

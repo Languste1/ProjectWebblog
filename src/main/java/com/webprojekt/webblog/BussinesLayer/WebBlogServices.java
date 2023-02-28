@@ -44,7 +44,7 @@ public class WebBlogServices  {
         Optional<User> user = userRepository.findById(customerId);
         Entry entry = new Entry(text);
         entry.setText(text);
-        entry.setUser(user.get());
+        entry.setUser(user.get ());
         entry.setTitle (title);
         entryRepository.save(entry);
     }
@@ -81,9 +81,10 @@ public class WebBlogServices  {
     }
 
     public String findIdByUsername(String name) {
-        Optional<User> user = userRepository.findByUsername (name);
-        return user.get ().getId ();
+        Optional<User> user = userRepository.findByUsername(name);
+        return user.map(User::getId).orElse("");
     }
+
 
     public void upgrade (String id){
         Optional<User> user = userRepository.findById(id);

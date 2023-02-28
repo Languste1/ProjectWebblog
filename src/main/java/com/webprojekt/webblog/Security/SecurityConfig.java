@@ -34,7 +34,7 @@ public class SecurityConfig {
         http
                 .csrf() // disable CSRF protection
                 .disable()
-                .authorizeHttpRequests ()
+                .authorizeRequests ()
                 // allow access to static resources (CSS, JS, etc.) at common locations
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 // allow access to certain pages without authentication
@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .and()
                 // enable form-based login
                 .formLogin()
-                // specify the login page URL
+                // specify the login page URLv
                 .loginPage("/login")
                 // redirect to homepage after successful login
                 .defaultSuccessUrl("/")
