@@ -11,28 +11,58 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Roboto:wght@100&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Get all "navbar-burger" elements
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+            // Add a click event on each of them
+            $navbarBurgers.forEach(el => {
+                el.addEventListener('click', () => {
+
+                    // Get the target from the "data-target" attribute
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target);
+
+                    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+
+                });
+            });
+
+        });
+    </script>
 </head>
 <body>
-<nav class="navbar has-background-orange" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand is-align-content-center">
+<div class="">
 
-        <figure class="image is-40x40">
-            <a class="navbar-item" href="/">
-                <img class="is-rounded" src="/ghostface.jpg" alt="Ghostface icon">
-            </a>
-        </figure>
+</div>
+<nav class="navbar is-active has-background-orange" role="navigation" aria-label="main navigation">
+    <!--  <div class="navbar-brand is-align-content-center">
 
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
 
-    <div id="navbarBasicExample" class="navbar-menu">
+     !--
+                 <a role="button" class="navbar-burger is-large is-fullwidth has-background-warning" aria-label="menu" aria-expanded="false"
+                    data-target="navbarBasicExample">
+                     <span aria-hidden="true"></span>
+                     <span aria-hidden="true"></span>
+                     <span aria-hidden="true"></span>
+                 </a>
+
+    </div> -->
+
+    <div id="navbarBasicExample" class="navbar-menu has-background-orange has-text-centered navbar-position">
         <div class="navbar-start">
             <div class="navbar-item is-justify-content-center">
                 <div class="buttons">
+                    <figure class="image is-40x40">
+                        <a class="navbar-item" href="/">
+                            <img class="is-rounded" src="/ghostface.jpg" alt="Ghostface icon">
+                        </a>
+                    </figure>
                     <a class="button is-transparent" th:href="@{/}">
                         Home
                     </a>
@@ -92,7 +122,9 @@
                 <form action="#" method="post" th:action="@{/}" th:object="${entry}">
                     <input type="hidden" name="entryType" value="entry">
                     <p><input type="text" name="title" th:field="*{title}" th:placeholder="Titel"></p>
-                    <p><input type="text" name="text" th:field="*{text}" th:placeholder="Beitrag"></p>
+                    <p>
+                        <textarea type="text" name="text" th:field="*{text}" th:placeholder="Beitrag"></textarea>
+                    </p>
                     <button type="submit">Neuen Beitrag erstellen</button>
                 </form>
             </div>
@@ -113,11 +145,11 @@
     <br>
     <ul>
         <li th:each="e : ${entries}">
-            <div class="container1">
+            <div class="container1 ">
 
                 <div class="container2">
                     <div class="image-container is-left">
-                        <img src="/img_1.png" alt="Your image description">
+                        <img src="/scarymovie.png" alt="Your image description">
                     </div>
 
                     <div class="container3">
@@ -128,13 +160,15 @@
                             <br>
                             <span></span> <span th:text="${e.title}"></span>
                             <div class="buttonline">
-                            <form th:action="@{'/deleteEntry/' + ${e.id}}" method="post">
-                                <button class="button is-rounded is-small" type="submit" name="deleteEntry">🗑️</button>
-                            </form>
+                                <form th:action="@{'/deleteEntry/' + ${e.id}}" method="post">
+                                    <button class="button is-rounded is-small" type="submit" name="deleteEntry">🗑️
+                                    </button>
+                                </form>
                                 <br>
-                            <form th:action="@{'/editEntry/' + ${e.id}}" method="get">
-                                <button class="button is-rounded is-small" type="submit" name="editEntry">🖊️</button>
-                            </form>
+                                <form th:action="@{'/editEntry/' + ${e.id}}" method="get">
+                                    <button class="button is-rounded is-small" type="submit" name="editEntry">🖊️
+                                    </button>
+                                </form>
 
                             </div>
 
@@ -148,7 +182,7 @@
                             <!-- th:if="${user == sessionUser}"-->
                             <form action="#" method="post" th:action="@{/}" th:object="${comment}">
                                 <input type="hidden" name="entryId" th:value="${e.id}">
-                                <p>Text<input type="text" th:field="*{text}" th:placeholder="Kommetar"></p>
+                                <p>Text<input type="text" th:field="*{text}" th:placeholder="Kommentar"></p>
                                 <button class="button is-rounded is-small" type="submit">Kommentar abschicken</button>
                             </form>
                         </div>
@@ -164,7 +198,9 @@
                                         <br>
                                         <span>Comment: </span><span th:text="${c.text}"></span>
                                         <form th:action="@{'/deletecomment/' + ${c.id}}" method="post">
-                                            <button class="button is-rounded is-small" type="submit" name="deleteComment">Kommentar löschen</button>
+                                            <button class="button is-rounded is-small" type="submit"
+                                                    name="deleteComment">Kommentar löschen
+                                            </button>
                                         </form>
                                     </div>
                                     <br>
