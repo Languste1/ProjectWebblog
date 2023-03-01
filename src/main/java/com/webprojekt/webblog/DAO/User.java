@@ -48,12 +48,14 @@ public class User implements UserDetails {
     public User(String name) {
         this.name = name;
     }
-    @Column(name = "username",
-    nullable = false, unique = true)
+    @Column(
+            name = "username",
+            nullable = false,
+            unique = true)
     @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Only letters, digits and underscores allowed")
     private String username;
 
-    @Column(name = "passwort",
+    @Column(name = "password",
     nullable = false)
     @Size(min = 5, message = "your password must have at least 5 characters") //Theoretisch auch max implementierbar
     private String password;
@@ -75,11 +77,6 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of (new SimpleGrantedAuthority (userRoles.name ()));
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
     }
 
     @Override

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-  <link rel="stylesheet" th:href="@{/newSheet.css}">
+  <link rel="stylesheet" th:href="@{/css/newSheet.css}">
 </head>
 <body>
 <nav class="navbar has-background-orange" role="navigation" aria-label="main navigation">
@@ -13,7 +13,7 @@
 
     <figure class="image is-40x40">
       <a class="navbar-item" href="/">
-        <img class="is-rounded" src="/ghostface.jpg" alt="Ghostface icon" >
+        <img class="is-rounded" src="/css/ghostface.jpg" alt="Ghostface icon" >
       </a>
     </figure>
 
@@ -59,26 +59,26 @@
   </div>
 </nav>
 <div>
-<h1>Sign up</h1>
-<h2>Registration Form</h2>
-<form action="#" th:action="@{/registration}" th:object="${user}" method="post">
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" th:field="*{name}" />
+  <h1>Sign up</h1>
+  <h2>Registration Form</h2>
+  <form action="#" th:action="@{/registration}" th:object="${user}" method="post">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" th:field="*{name}" />
 
-  <label for="username">Username:</label>
-  <input type="text" id="username" name="username" th:field="*{username}" />
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" th:field="*{username}" />
 
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" th:field="*{email}" />
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" th:field="*{email}" />
 
-  <label for="password">Password:</label>
-  <input type="password" id="password" name="password" th:field="*{password}" />
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" th:field="*{password}" />
 
-  <button type="submit">Register</button>
-</form>
+    <button type="submit">Register</button>
+  </form>
 
-<p th:text="${message}" style="color:green"></p>
-<p th:text="${error}" style="color:red"></p>
+  <p th:text="${message}" style="color:green"></p>
+  <p th:text="${error}" style="color:red"></p>
 </body>
 </html>
 

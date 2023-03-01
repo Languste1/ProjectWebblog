@@ -10,5 +10,8 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment,Long> {
+
     void deleteAllByEntry(Entry entry);
+
+
 }

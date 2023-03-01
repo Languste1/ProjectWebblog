@@ -11,12 +11,13 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/")
 @Controller
 public class AnonController {
     private final WebBlogServices webBlogServices;
@@ -28,7 +29,7 @@ public class AnonController {
         this.authenticationService = authenticationService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/index")
     public String index(Model model){
         //  webBlogServices.addAdmin (new User ("admin",""));
 
@@ -39,63 +40,6 @@ public class AnonController {
 
         return "index";
     }
-    @PostMapping("/")
-    public String addEntryOrComment(@ModelAttribute Entry entry, @ModelAttribute Comment comment, Model model, HttpServletRequest request) {
-        if (entry.getTitle() != null) {
-            this.webBlogServices.addEntry(entry.getTitle (), entry.getText(), webBlogServices.findIdByUsername("Admin"));
-        } else if (comment.getText() != null) {
-            Long entryId = Long.parseLong(request.getParameter("entryId"));
-            this.webBlogServices.addComment(comment.getText(), webBlogServices.findIdByUsername("admin"), entryId);
-        }
-        model.addAttribute("entry", new Entry());
-        model.addAttribute("comment", new Comment());
-        return "redirect:/";
-    }
-    @PostMapping("/deletecomment/{id}")
-    public String deleteComment(@PathVariable("id") Long id, @RequestParam(value = "deleteComment", required = false) String deleteComment) {
-        if (deleteComment != null) {
-            webBlogServices.deleteComment(id);
-        }
-        return "redirect:/";
-    }
-    @PostMapping("/deleteEntry/{entryId}")
-    public String deleteEntry(@PathVariable("entryId") Long entryId) {
-        webBlogServices.deleteEntry(entryId);
-        return "redirect:/";
-    }
-    @GetMapping("/editEntry/{id}")
-    public String editEntry(@PathVariable Long id, Model model) {
-        Entry entry = webBlogServices.getEntryById(id);
-        model.addAttribute("entry", entry);
-        model.addAttribute("title", entry.getTitle());
-        model.addAttribute("text", entry.getText());
-        return "editentry";
-    }
-    @PostMapping("/updateEntry/{id}")
-    public String updateEntry(@PathVariable Long id, @ModelAttribute Entry entry) {
-        webBlogServices.updateEntry(id, entry.getTitle(), entry.getText());
-        return "redirect:/";
-    }
-
-
-
-
-
-/*
-    @PostMapping("/")
-    public String addComment(@ModelAttribute Comment comment, Model model, HttpServletRequest request) {
-
-        Long entryId = Long.parseLong(request.getParameter("entryId"));
-
-        this.webBlogServices.addComment(comment.getText(), webBlogServices.findIdByUsername("admin"), entryId );
-        model.addAttribute("comment", new Comment());
-
-
-
-        return "redirect:/";
-    }
-
- */
 
 
     @GetMapping("/registration")
@@ -120,8 +64,7 @@ public class AnonController {
     public String registerUser(@ModelAttribute("user") RegisterRequest request, Model model) {
         try {
             authenticationService.register(request);
-            model.addAttribute("message", "User registered successfully!");
-            return "redirect:/";
+            return "redirect:/login";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "registration";
@@ -130,40 +73,23 @@ public class AnonController {
     }
 
     @GetMapping("/login")
-    public String login(@ModelAttribute AuthenticationRequest request, Model model){
-        model.addAttribute ("login",new AuthenticationRequest ());
-        return "/login";
+    public String showLoginPage(Model model) {
+        model.addAttribute("login", new AuthenticationRequest());
+        return "login";
     }
 
     @PostMapping("/login")
-    public String loginPost(
-            @ModelAttribute AuthenticationRequest request,
-            Model model,
-            HttpServletRequest httpRequest,
-            HttpServletResponse httpResponse
-    ) {
+    public String login(@ModelAttribute AuthenticationRequest request, Model model) {
         try {
             AuthenticationResponse authenticationResponse = authenticationService.authenticate(request);
-            String token = authenticationResponse.getToken();
-            Cookie cookie = new Cookie("jwtToken", token);
-            cookie.setMaxAge(60 * 60 * 24); // set cookie expiration to 1 day
-            cookie.setPath("/");
-            httpResponse.addCookie(cookie);
-            return "redirect:/"; // redirect to home page after successful authentication
-        } catch (AuthenticationException e) {
-            model.addAttribute("error", "Invalid username or password");
-            model.addAttribute("login", new AuthenticationRequest()); // add the login object to the model to prepopulate the form
+            model.addAttribute("token", authenticationResponse.getToken());
+            return "redirect:/index"; // or any other URL you want to redirect to after login
+        } catch (UsernameNotFoundException | BadCredentialsException e) {
+            model.addAttribute("errorMessage", "Invalid username or password");
             return "login";
         }
     }
 
-
-
-    @GetMapping("/entries")
-    public  String getEntries(){
-
-        return "entries";
-    }
 
     @GetMapping("/dummies")
     public String getDummies(){
@@ -171,22 +97,14 @@ public class AnonController {
         webBlogServices.addUser ("Dummy Dummyson2","dummy","dummy1234","dummy@dummy.com");
         webBlogServices.addUser ("Dummy Dummyson3","dummy2","dummy1234","dummy@dummy.com");
 
-    //dummy
-
 
         webBlogServices.addEntry("Placeholder","Hier ist ein Text1", webBlogServices.findIdByUsername("admin"));
         webBlogServices.addEntry("Placeholder4","Hier ist ein Text2", webBlogServices.findIdByUsername("admin"));
         webBlogServices.addEntry("Placeholder2","Hier ist ein Text3", webBlogServices.findIdByUsername("admin"));
         webBlogServices.addEntry("Placeholder3","Hier ist ein Text4", webBlogServices.findIdByUsername("admin"));
-        return "redirect:/";
+        return "redirect:/index";
     }
 
-    @GetMapping("/users")
-    public String getAllUsers(Model model) {
-
-        model.addAttribute("users", webBlogServices.getAllUsers ());
-        return "users";
-    }
 
     @PostMapping("/users/{id}/upgrade")
     public String upgradeUser(@PathVariable("id") String id, Model model) {
@@ -201,6 +119,55 @@ public class AnonController {
         model.addAttribute("users", webBlogServices.getAllUsers ());
         return "users";
     }
+
+    @GetMapping("/users")
+    public String getAllUsers(Model model) {
+
+        model.addAttribute("users", webBlogServices.getAllUsers ());
+        return "users";
+    }
+
+    @PostMapping("/index")
+    public String addEntryOrComment(@ModelAttribute Entry entry, @ModelAttribute Comment comment, Model model, HttpServletRequest request) {
+        if (entry.getTitle() != null) {
+            this.webBlogServices.addEntry(entry.getTitle (), entry.getText(), webBlogServices.findIdByUsername("Admin"));
+        } else if (comment.getText() != null) {
+            Long entryId = Long.parseLong(request.getParameter("entryId"));
+            this.webBlogServices.addComment(comment.getText(), webBlogServices.findIdByUsername("admin"), entryId);
+        }
+        model.addAttribute("entry", new Entry());
+        model.addAttribute("comment", new Comment());
+        return "redirect:/index";
+    }
+
+    @PostMapping("/deletecomment/{id}")
+    public String deleteComment(@PathVariable("id") Long id, @RequestParam(value = "deleteComment", required = false) String deleteComment) {
+        if (deleteComment != null) {
+            webBlogServices.deleteComment(id);
+        }
+        return "redirect:/index";
+    }
+    @PostMapping("/deleteEntry/{entryId}")
+    public String deleteEntry(@PathVariable("entryId") Long entryId) {
+        webBlogServices.deleteEntry(entryId);
+        return "redirect:/index";
+    }
+    @GetMapping("/editEntry/{id}")
+    public String editEntry(@PathVariable Long id, Model model) {
+        Entry entry = webBlogServices.getEntryById(id);
+        model.addAttribute("entry", entry);
+        model.addAttribute("title", entry.getTitle());
+        model.addAttribute("text", entry.getText());
+        return "editentry";
+    }
+    @PostMapping("/updateEntry/{id}")
+    public String updateEntry(@PathVariable Long id, @ModelAttribute Entry entry) {
+        webBlogServices.updateEntry(id, entry.getTitle(), entry.getText());
+        return "redirect:/index";
+    }
+
+
+
 }
 
 

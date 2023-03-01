@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/WebBlog/User/isModerator")
+@RequestMapping("/users")
 @Controller
 public class ModeratorController {
 
@@ -18,9 +18,6 @@ public class ModeratorController {
         this.webBlogServices = webBlogServices;
         this.authenticationService = authenticationService;
     }
-
-
-
 
 
 

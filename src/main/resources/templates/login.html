@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" th:href="@{/newSheet.css}">
+    <link rel="stylesheet" th:href="@{/css/newSheet.css}">
 </head>
 <body>
 <nav class="navbar has-background-orange" role="navigation" aria-label="main navigation">
@@ -12,7 +12,7 @@
 
         <figure class="image is-40x40">
             <a class="navbar-item" href="/">
-                <img class="is-rounded" src="/ghostface.jpg" alt="Ghostface icon" >
+                <img class="is-rounded" src="/css/ghostface.jpg" alt="Ghostface icon" >
             </a>
         </figure>
 
@@ -57,7 +57,6 @@
         </div>
     </div>
 </nav>
-<div>
 <h1>Login</h1>
 
 <div th:if="${param.error}">
