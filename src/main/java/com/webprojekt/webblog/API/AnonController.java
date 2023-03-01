@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.context.IContext;
 
 @Controller
 public class AnonController {
@@ -138,6 +139,7 @@ public class AnonController {
             Long entryId = Long.parseLong(request.getParameter("entryId"));
             this.webBlogServices.addComment(comment.getText(), webBlogServices.findIdByUsername("admin"), entryId);
         }
+
         model.addAttribute("entry", new Entry());
         model.addAttribute("comment", new Comment());
         return "redirect:/index";
