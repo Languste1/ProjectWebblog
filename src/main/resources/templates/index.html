@@ -125,18 +125,19 @@
                         <div>
                             <span>Text: </span> <span th:text="${e.text}"></span>
                         </div>
-                        <div>
-                            <!-- th:if="${user == sessionUser}"-->
-                            <form action="#" method="post" th:action="@{/index}" th:object="${comment}">
-                                <input type="hidden" name="entryId" th:value="${e.id}">
-                                <p>Text<label>
-                                    <input type="text" th:field="*{text}" th:placeholder="Kommentar">
-                                </label></p>
-                                <button class="button is-rounded is-small" type="submit">Kommentar abschicken</button>
-                            </form>
-                        </div>
+
                         <br>
                         <div class="container3">
+                            <div class="margintop">
+                                <!-- th:if="${user == sessionUser}"-->
+                                <form action="#" method="post" th:action="@{/index}" th:object="${comment}">
+                                    <input type="hidden" name="entryId" th:value="${e.id}">
+                                    <p>Text<label>
+                                        <input type="text" th:field="*{text}" th:placeholder="Kommentar">
+                                    </label></p>
+                                    <button class="button is-rounded is-small" type="submit">Kommentar abschicken</button>
+                                </form>
+                            </div>
                             <ul>
 
                                 <li th:each="c : ${comments}" th:if="${e.id==c.getEntry().getId()}">
