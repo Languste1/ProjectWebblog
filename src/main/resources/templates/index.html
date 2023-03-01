@@ -7,22 +7,14 @@
     <link rel="stylesheet" th:href="@{/css/newSheet.css}">
 </head>
 <body>
-<header>
-    <nav>
-        <ul>
-            <li><a th:href="@{/login}">Login</a></li>
-            <li><a th:href="@{/registration}">Register Now</a></li>
-            <li><a th:href="@{/dummies}">Dummies laden (Hardcoded! nur einmal klicken nach Serverstart</a></li>
-        </ul>
-    </nav>
-</header>
+<nav class="navbar has-background-orange" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand is-align-content-center">
 
-
-<nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-            <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-        </a>
+        <figure class="image is-40x40">
+            <a class="navbar-item" href="/">
+                <img class="is-rounded" src="/css/ghostface.jpg" alt="Ghostface icon" >
+            </a>
+        </figure>
 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
@@ -33,78 +25,129 @@
 
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-            <a class="navbar-item">
-                Home
-            </a>
+            <div class="navbar-item is-justify-content-center">
+                <div class="buttons">
+                    <a class="button is-transparent" th:href="@{/index}">
+                        Home
+                    </a>
+                    <a class="button is-transparent" th:href="@{/dummies}">
+                        Load Dummies
+                    </a>
+                    <a class="button is-transparent" th:href="@{/users}">
+                        Users
+                    </a>
+                </div>
+
+            </div>
+
         </div>
+
 
         <div class="navbar-end">
             <div class="navbar-item">
                 <div class="buttons">
-                    <a class="button is-primary">
+                    <a class="button is-transparent" th:href="@{/registration}">
                         <strong>Sign up</strong>
                     </a>
-                    <a class="button is-light">
-                        Log in
+                    <a class="button is-transparent" th:href="@{/login}">
+                        <strong>Log in</strong>
                     </a>
                 </div>
             </div>
         </div>
     </div>
 </nav>
-
-<main>
-    <div class="container1">
-        <form action="#" method="post" th:action="@{/index}" th:object="${entry}">
-            <input type="hidden" name="entryType" value="entry">
-            <p>Title<input type="text" name="title" th:field="*{title}"></p>
-            <p>Text<input type="text" name="text" th:field="*{text}"></p>
-            <button type="submit">Neuen Beitrag erstellen</button>
-        </form>
-
+<div>
+</div>
+<!--
+<header class="has-background-orange">
+    <nav>
+        <ul>
+            <li><a th:href="@{/entries}">Unsere Beiträge entdecken</a></li>
+            <li><a th:href="@{/dummies}">Dummies laden (Hardcoded! nur einmal klicken nach Serverstart</a></li>
+        </ul>
+    </nav>
+</header>
+-->
+<main class="has-text-centered">
+    <div class="banner">
+        <img src="/css/banner.png" alt="">
     </div>
-
     <br>
-    <ul>
-        <li th:each="e : ${entries}">
-            <div class="container1">
-            <div>
-                <span>Date: </span><span th:text="${e.date}"></span>
-                <span>Name: </span> <span th:text="${e.user.name}"></span>
-                <span>title: </span> <span th:text="${e.title}"></span>
-            </div>
-            <div>
-                <span>Text: </span> <span th:text="${e.text}"></span>
-            </div>
-            <div>
-                <!-- th:if="${user == sessionUser}"-->
-                <form action="#" method="post" th:action="@{/index}" th:object="${comment}">
-                    <input type="hidden" name="entryId" th:value="${e.id}">
-                    <p>Text<input type="text" th:field="*{text}"></p>
-                    <button type="submit">Kommentar abschicken</button>
-                </form>
-            </div>
-            <br>
-            <div>
-                <ul>
+    <h1>Willkommem auf unserem Blog</h1>
+    <br>
 
-                    <li th:each="c : ${comments}" th:if="${e.id==c.getEntry().getId()}">
+    <main>
+        <div class="container1">
+            <form action="#" method="post" th:action="@{/index}" th:object="${entry}">
+                <input type="hidden" name="entryType" value="entry">
+                <p>Title<input type="text" name="title" th:field="*{title}"></p>
+                <p>Text<input type="text" name="text" th:field="*{text}"></p>
+                <button type="submit">Neuen Beitrag erstellen</button>
+            </form>
+
+        </div>
+
+        <br>
+        <ul>
+            <li th:each="e : ${entries}">
+                <div class="container1">
+
+                    <div class="image-container">
+                        <img src="/css/img_1.png" alt="Your image description">
+                    </div>
+                    <div class="container2">
                         <div>
-                            <span>Name: </span><span th:text="${c.user.name}"></span>
-                            <br>
-                            <span>Date: </span><span th:text="${c.date}"></span>
-                            <br>
-                            <span>Comment: </span><span th:text="${c.text}"></span>
+
+                            <span>Date: </span><span th:text="${e.date}"></span>
+                            <span>Name: </span> <span th:text="${e.user.name}"></span>
+                            <span>title: </span> <span th:text="${e.title}"></span>
+                            <form th:action="@{'/deleteEntry/' + ${e.id}}" method="post">
+                                <button type="submit" name="deleteEntry">Beitrag löschen</button>
+                            </form>
+                            <form th:action="@{'/editEntry/' + ${e.id}}" method="get">
+                                <button type="submit" name="editEntry">Beitrag bearbeiten</button>
+                            </form>
+
+                        </div>
+                        <div>
+                        </div>
+                        <div>
+                            <span>Text: </span> <span th:text="${e.text}"></span>
+                        </div>
+                        <div>
+                            <!-- th:if="${user == sessionUser}"-->
+                            <form action="#" method="post" th:action="@{/index}" th:object="${comment}">
+                                <input type="hidden" name="entryId" th:value="${e.id}">
+                                <p>Text<input type="text" th:field="*{text}"></p>
+                                <button type="submit">Kommentar abschicken</button>
+                            </form>
                         </div>
                         <br>
+                        <div class="container3">
+                            <ul>
 
-                    </li>
-                </ul>
-            </div>
-            </div>
-        </li>
-    </ul>
-</main>
+                                <li th:each="c : ${comments}" th:if="${e.id==c.getEntry().getId()}">
+                                    <div>
+                                        <span>Name: </span><span th:text="${c.user.name}"></span>
+                                        <br>
+                                        <span>Date: </span><span th:text="${c.date}"></span>
+                                        <br>
+                                        <span>Comment: </span><span th:text="${c.text}"></span>
+                                        <form th:action="@{'/deletecomment/' + ${c.id}}" method="post">
+                                            <button type="submit" name="deleteComment">Kommentar löschen</button>
+                                        </form>
+                                    </div>
+                                    <br>
+
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </main>
 
 
 </body>

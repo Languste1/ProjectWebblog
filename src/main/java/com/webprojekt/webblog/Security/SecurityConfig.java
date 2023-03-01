@@ -40,7 +40,7 @@ public class SecurityConfig {
                 // allow access to static resources (CSS, JS, etc.) at common locations
                 .requestMatchers(PathRequest.toStaticResources ().atCommonLocations ()).permitAll()
                 // allow access to certain pages without authentication
-                .requestMatchers ("/**","/index**","/registration**","/login**","/resources**","/css/**").permitAll()
+                .requestMatchers ("/**","/index**","/registration**","/login**","/resources**","/css/**", "delete**", "editentry**", "").permitAll()
                 // allow access to user-related pages for users, moderators, and admins
                 .requestMatchers ("/dummies**").hasAnyRole(
                         UserRoles.USER.name (),

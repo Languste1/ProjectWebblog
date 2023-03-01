@@ -98,7 +98,6 @@ public class AnonController {
         webBlogServices.addUser ("Dummy Dummyson3","dummy2","dummy1234","dummy@dummy.com");
 
 
-
         webBlogServices.addEntry("Placeholder","Hier ist ein Text1", webBlogServices.findIdByUsername("admin"));
         webBlogServices.addEntry("Placeholder4","Hier ist ein Text2", webBlogServices.findIdByUsername("admin"));
         webBlogServices.addEntry("Placeholder2","Hier ist ein Text3", webBlogServices.findIdByUsername("admin"));
@@ -138,6 +137,32 @@ public class AnonController {
         }
         model.addAttribute("entry", new Entry());
         model.addAttribute("comment", new Comment());
+        return "redirect:/index";
+    }
+
+    @PostMapping("/deletecomment/{id}")
+    public String deleteComment(@PathVariable("id") Long id, @RequestParam(value = "deleteComment", required = false) String deleteComment) {
+        if (deleteComment != null) {
+            webBlogServices.deleteComment(id);
+        }
+        return "redirect:/index";
+    }
+    @PostMapping("/deleteEntry/{entryId}")
+    public String deleteEntry(@PathVariable("entryId") Long entryId) {
+        webBlogServices.deleteEntry(entryId);
+        return "redirect:/index";
+    }
+    @GetMapping("/editEntry/{id}")
+    public String editEntry(@PathVariable Long id, Model model) {
+        Entry entry = webBlogServices.getEntryById(id);
+        model.addAttribute("entry", entry);
+        model.addAttribute("title", entry.getTitle());
+        model.addAttribute("text", entry.getText());
+        return "editentry";
+    }
+    @PostMapping("/updateEntry/{id}")
+    public String updateEntry(@PathVariable Long id, @ModelAttribute Entry entry) {
+        webBlogServices.updateEntry(id, entry.getTitle(), entry.getText());
         return "redirect:/index";
     }
 
