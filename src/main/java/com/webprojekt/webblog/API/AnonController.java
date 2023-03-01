@@ -98,10 +98,39 @@ public class AnonController {
         webBlogServices.addUser ("Dummy Dummyson3","dummy2","dummy1234","dummy@dummy.com");
 
 
-        webBlogServices.addEntry("Placeholder","Hier ist ein Text1", webBlogServices.findIdByUsername("admin"));
-        webBlogServices.addEntry("Placeholder4","Hier ist ein Text2", webBlogServices.findIdByUsername("admin"));
-        webBlogServices.addEntry("Placeholder2","Hier ist ein Text3", webBlogServices.findIdByUsername("admin"));
-        webBlogServices.addEntry("Placeholder3","Hier ist ein Text4", webBlogServices.findIdByUsername("admin"));
+        webBlogServices.addEntry("Scary Movie","\"Scary Movie\" ist eine Horror-Komödie aus dem Jahr 2000, " +
+                "die eine Parodie auf viele bekannte Horrorfilme und -figuren enthält, wie beispielsweise \"Scream\", " +
+                "\"The Sixth Sense\" und \"The Blair Witch Project\".Die Handlung folgt einer Gruppe von High-School-Schülern, " +
+                "die von einem maskierten Mörder terrorisiert werden. Der Film nimmt bekannte Klischees des Horror-Genres aufs " +
+                "Korn und persifliert sie auf humorvolle und oft absurde Weise. Dabei werden auch sexuelle Themen und Anspielungen " +
+                "auf Popkultur aufgegriffen.\"Scary Movie\" ist bekannt für seine exzessive Verwendung von Gags und Anspielungen, " +
+                "die sich oft auf die Grenzen des guten Geschmacks bewegen. Der Film war ein großer Erfolg an der Kinokasse und " +
+                "führte zu mehreren Fortsetzungen, die ähnliche Themen und Stilmittel aufgriffen.", webBlogServices.findIdByUsername("admin"));
+
+        webBlogServices.addEntry("Fight Club","\"Fight Club\" ist ein Film aus dem Jahr 1999, der auf dem gleichnamigen " +
+                "Roman von Chuck Palahniuk basiert. Der Film erzählt die Geschichte eines namenlosen Protagonisten (gespielt von Edward Norton), " +
+                "der an Schlaflosigkeit leidet und sich in einer existenziellen Krise befindet.Auf der Suche nach Sinn und Erfüllung " +
+                "in seinem Leben trifft er auf Tyler Durden (gespielt von Brad Pitt), einen charismatischen und rebellischen Mann, der " +
+                "ihn in einen Untergrund-Club einführt, in dem Männer in illegalen Faustkämpfen ihre Aggressionen ausleben. Der Club " +
+                "entwickelt sich schnell zu einer anarchistischen Bewegung, die die Konsumgesellschaft und die Normen der Gesellschaft " +
+                "in Frage stellt.Während der Film scheinbar über Gewalt, Chaos und Anarchie handelt, enthüllt er im Verlauf der Handlung " +
+                "eine tiefere psychologische Dimension. Der Protagonist und Tyler Durden sind zwei Seiten derselben Persönlichkeit, die " +
+                "durch den Kampfclub und ihre anarchistische Bewegung versuchen, aus dem engen Korsett der modernen Gesellschaft auszubrechen.",
+                webBlogServices.findIdByUsername("admin"));
+        webBlogServices.addEntry("Fear and loathing in Las Vegas","\"Fear and Loathing\" ist ein Film aus dem Jahr 1998, der" +
+                " auf dem gleichnamigen Roman von Hunter S. Thompson basiert. Der Film erzählt die Geschichte von Raoul Duke (gespielt " +
+                "von Johnny Depp) und seinem Anwalt Dr. Gonzo (gespielt von Benicio Del Toro), die nach Las Vegas reisen, um über ein " +
+                "Motorradrennen zu berichten und sich dabei in einen wilden Drogenrausch stürzen.Der Film zeigt die surrealen und oft " +
+                "verstörenden Abenteuer der beiden Protagonisten, die durch ihre Verwendung von LSD und anderen Drogen eine Abwärtsspirale " +
+                "erleben. Der Film setzt sich auch kritisch mit der amerikanischen Gesellschaft der 60er Jahre auseinander und zeigt die " +
+                "Auswirkungen von Drogenmissbrauch und Exzessen auf das menschliche Leben.", webBlogServices.findIdByUsername("admin"));
+
+        webBlogServices.addEntry("Scarface","\"Scarface\" ist ein Film aus dem Jahr 1983 von Regisseur Brian De Palma. Der Film " +
+                "erzählt die Geschichte von Tony Montana (gespielt von Al Pacino), einem kubanischen Einwanderer, der in Miami in den " +
+                "1980er Jahren zum mächtigsten Drogenboss aufsteigt.Der Film zeigt den Aufstieg von Tony Montana von einem einfachen " +
+                "Einwanderer zu einem skrupellosen Drogenhändler, der sich durch Gewalt, Betrug und Bestechung an die Spitze kämpft. " +
+                "Während er immer mehr Macht und Reichtum erlangt, zerfällt seine Beziehung zu seiner Frau Elvira (gespielt von Michelle " +
+                "Pfeiffer) und er gerät in einen blutigen Krieg mit rivalisierenden Gangs.", webBlogServices.findIdByUsername("admin"));
         return "redirect:/index";
     }
 

@@ -2,47 +2,54 @@
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" th:href="@{/css/newSheet.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Roboto:wght@100&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get all "navbar-burger" elements
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+            // Add a click event on each of them
+            $navbarBurgers.forEach(el => {
+                el.addEventListener('click', () => {
+
+                    // Get the target from the "data-target" attribute
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target);
+
+                    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+                });
+            });
+        });
+    </script>
+    <title>Users</title>
 </head>
-<body>
-<nav class="navbar has-background-orange" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand is-align-content-center">
-
-        <figure class="image is-40x40">
-            <a class="navbar-item" href="/">
-                <img class="is-rounded" src="/css/ghostface.jpg" alt="Ghostface icon" >
-            </a>
-        </figure>
-
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
-
-    <div id="navbarBasicExample" class="navbar-menu">
+<body class="has-text-centered">
+<nav class="navbar is-active has-background-orange" role="navigation" aria-label="main navigation">
+    <div id="navbarBasicExample" class="navbar-menu has-background-orange has-text-centered navbar-position">
         <div class="navbar-start">
             <div class="navbar-item is-justify-content-center">
                 <div class="buttons">
+                    <figure class="image is-40x40">
+                        <a class="navbar-item" href="/">
+                            <img class="is-rounded" src="/css/ghostface.jpg" alt="Ghostface icon">
+                        </a>
+                    </figure>
                     <a class="button is-transparent" th:href="@{/index}">
                         Home
                     </a>
-                    <a class="button is-transparent" th:href="@{/entries}">
-                        Beiträge
-                    </a>
-                    <a class="button is-transparent" th:href="@{/dummies}">
-                        Load Dummies
-                    </a>
                 </div>
-
             </div>
-
         </div>
-
-
         <div class="navbar-end">
             <div class="navbar-item">
                 <div class="buttons">
@@ -75,7 +82,6 @@
         <td th:text="${user.name}"></td>
         <td th:text="${user.email}"></td>
         <td th:text="${user.userRoles}"></td>
-
         <td>
             <form th:action="@{/users/{id}/upgrade(id=${user.id})}" method="post">
                 <input type="submit" value="Upgrade">
