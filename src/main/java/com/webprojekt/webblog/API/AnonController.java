@@ -143,7 +143,7 @@ public class AnonController {
         return "redirect:/index";
     }
 
-
+/*
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -152,7 +152,7 @@ public class AnonController {
         }
         return "redirect:/index";
     }
-
+*/
 
 }
 

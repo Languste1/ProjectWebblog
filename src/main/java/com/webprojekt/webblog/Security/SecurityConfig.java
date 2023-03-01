@@ -1,5 +1,6 @@
 package com.webprojekt.webblog.Security;
 
+import com.webprojekt.webblog.BussinesLayer.LogoutService;
 import com.webprojekt.webblog.DAO.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -17,62 +18,81 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
+    private final AccessDeniedHandlerImpl accessDeniedHandler;
     private final JwtAuthenticationFilter jwtAthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
+    // Konstruktor, um die erforderlichen Abhängigkeiten zu injizieren
     @Autowired
-    public SecurityConfig(JwtAuthenticationFilter jwtAthFilter, AuthenticationProvider authenticationProvider, LogoutHandler logoutHandler) {
+    public SecurityConfig(
+            AccessDeniedHandlerImpl accessDeniedHandler,
+            JwtAuthenticationFilter jwtAthFilter,
+            AuthenticationProvider authenticationProvider,
+            LogoutHandler logoutHandler) {
+        this.accessDeniedHandler = accessDeniedHandler;
         this.jwtAthFilter = jwtAthFilter;
         this.authenticationProvider = authenticationProvider;
         this.logoutHandler = logoutHandler;
+
     }
 
 
+
+    // Konfigurieren der Sicherheitsfilterkette
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf() // disable CSRF protection
-                .disable()
-                .authorizeHttpRequests ()
-                // allow access to static resources (CSS, JS, etc.) at common locations
-                .requestMatchers(PathRequest.toStaticResources ().atCommonLocations ()).permitAll()
-                // allow access to certain pages without authentication
-                .requestMatchers ("/index**","/registration**","/login**","/resources**","/css/**").permitAll()
-                // allow access to user-related pages for users, moderators, and admins
-                .requestMatchers ("/dummies**","/logout").hasAnyRole(
-                        UserRoles.USER.name (),
-                        UserRoles.MODERATOR.name (),
-                        UserRoles.ADMIN.name ()
+                // deaktivieren des CSRF-Schutzes
+                .csrf().disable()
+                // Autorisierung von Http-Anfragen
+                .authorizeHttpRequests()
+                // Zugriff auf statische Ressourcen (CSS, JS, etc.) an gemeinsamen Orten erlauben
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                // Zugriff auf bestimmte Seiten ohne Authentifizierung erlauben
+                .requestMatchers(
+                        "/index**","/registration**",
+                        "/login**","/resources**","/css/**"
                 )
-                // allow access to moderator-related pages for moderators and admins
-                .requestMatchers ("/users").hasAnyRole(
-                        UserRoles.MODERATOR.name (),
-                        UserRoles.ADMIN.name ()
+                .permitAll()
+                // Zugriff auf benutzerbezogene Seiten für Benutzer, Moderatoren und Admins erlauben
+                .requestMatchers("/dummies**","/logout").hasAnyRole(
+                        UserRoles.USER.name(),
+                        UserRoles.MODERATOR.name(),
+                        UserRoles.ADMIN.name()
                 )
-                // allow access to admin-related pages for admins only
-                .requestMatchers ("/users**").hasAnyRole(UserRoles.ADMIN.name ())
-                // require authentication for all other requests
+                // Zugriff auf Moderator-bezogene Seiten für Moderatoren und Admins erlauben
+                .requestMatchers("/users").hasAnyRole(
+                        UserRoles.MODERATOR.name(),
+                        UserRoles.ADMIN.name()
+                )
+                // Zugriff auf Admin-bezogene Seiten nur für Admins erlauben
+                .requestMatchers("/users**").hasAnyRole(UserRoles.ADMIN.name())
+                // Authentifizierung für alle anderen Anfragen erforderlich machen
                 .anyRequest()
                 .authenticated()
-                .and ()
-                .exceptionHandling ().accessDeniedHandler (h)
-                .and ()
-                .formLogin ()
-                .loginPage ("/login")
-                .successForwardUrl ("/index")
+                // Zugriff verweigert Handler festlegen
+                .and().exceptionHandling().accessDeniedPage ("/index")
+                // Formular-basierte Authentifizierung aktivieren
+                .and().formLogin()
+                .loginPage("/login") // Login-Seite festlegen
+                .successForwardUrl("/index") // URL für die erfolgreiche Weiterleitung nach dem Login festlegen
                 .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                // Session-Management auf STATELESS festlegen, um CSRF-Schutz zu vermeiden
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                // AuthenticationProvider für die Authentifizierung konfigurieren
                 .authenticationProvider(authenticationProvider)
+                // JwtAuthenticationFilter hinzufügen, bevor der Standard-Filter hinzugefügt wird
                 .addFilterBefore(jwtAthFilter, UsernamePasswordAuthenticationFilter.class)
+                // Logout-Konfiguration
                 .logout()
                 .logoutUrl("/logout")
+                .logoutSuccessUrl ("/index")
                 .addLogoutHandler(logoutHandler)
                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
+
         return http.build();
     }
 
